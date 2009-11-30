@@ -1,0 +1,94 @@
+html,body {
+	margin:0;
+	background: #dacfb5;
+	font-family: "Comic Sans MS",chalkboard;
+	position: relative
+}
+
+
+#game_canvas {
+	margin:10px auto 0;
+	width:840px;
+}
+
+#game_info {
+	color:#fff;
+	text-shadow: 10px 10px 10px #ffcc66;
+	position: absolute;
+	bottom:0;
+	left:0;
+	z-index: 10;
+	width:100%;
+}
+
+span.red {
+	color: red;
+}
+
+span.yellow {
+	color: yellow;
+}
+
+span.active {
+	text-decoration: blink;
+}
+
+.row {
+}
+div.cell {
+	float:left;
+	width:120px;
+	height:120px;
+	background:#131e62;
+	position:relative;
+}
+
+div.cell.red .inner {
+	background: #f00;
+}
+div.cell.yellow .inner {
+	background: yellow;
+}
+
+.cell .inner {
+	position:absolute;
+	top:5px;
+	left:5px;
+	width:90px;
+	height:90px;
+	background: #dacfb5;
+	-webkit-border-radius:50px;
+	-moz-border-radius:50px;
+	cursor: pointer;
+	-webkit-box-shadow:5px 5px 10px black; 
+}
+.cell:hover .inner {
+	background: #b0a793;
+	-webkit-box-shadow:5px 5px 10px white; 
+}
+
+
+
+
+
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
