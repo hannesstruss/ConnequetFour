@@ -10,6 +10,8 @@ function FourInARow(canvasID, numRows, numCols) {
 	this.playerRedName = window.prompt("Bitte geben Sie den Namen von Spieler 1 ein!");
 	this.playerYellowName = window.prompt("Bitte geben Sie den Namen von Spieler 2 ein!");
 	
+	this.createFilters();
+	
 	$("#game_info").html("<h1><marquee><span class=\"red active\">" + this.playerRedName + "</span> VS <span class=\"yellow\">" + this.playerYellowName + "</span></marquee></h1>");
 }
 
@@ -45,6 +47,35 @@ FourInARow.prototype = {
 		}
 		
 		return canvas;
+	},
+	
+	createFilters: function() {
+		var horizontal = new WinFilter([
+			[1, 1, 1, 1]
+		]);
+		
+		var vertical = new WinFilter([
+			[1],
+			[1],
+			[1],
+			[1]
+		]);
+		
+		var diagonal1 = new WinFilter([
+			[1, 0, 0, 0],
+			[0, 1, 0, 0],
+			[0, 0, 1, 0],
+			[0, 0, 0, 1]
+		]);
+		
+		var diagonal2 = new WinFilter([
+			[0, 0, 0, 1],
+			[0, 0, 1, 0],
+			[0, 1, 0, 0],
+			[1, 0, 0, 0]
+		]);
+		
+		this.filters = [horizontal, vertical, diagonal1, diagonal2];
 	},
 	
 	initCellData: function() {
@@ -94,6 +125,17 @@ FourInARow.prototype = {
 				$(this.canvas[rowNum][colNum]).addClass(cellClass);
 			}
 		}
+	}
+}
+
+function WinFilter(filterMatrix) {
+	this.matrix = filterMatrix;
+	this.width = filterMatrix[0].length;
+	this.height = filterMatrix.length;
+}
+WinFilter.prototype = {
+	check: function(cellData) {
+		
 	}
 }
 
