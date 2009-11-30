@@ -56,7 +56,6 @@ FourInARow.prototype = {
 			
 			this.cellData.push(row);
 		}
-		console.log(this.cellData)
 	},
 	
 	onCellClick: function(colNum) {
