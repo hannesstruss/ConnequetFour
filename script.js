@@ -20,8 +20,8 @@ FourInARow.prototype = {
 			for (var colNum = 0; colNum < row.length; colNum++) {
 				var col = row[colNum];
 				var me = this;
-				$(col).bind("click", {colNum: colNum}, function(event) {
-					me.onCellClick(event.data.colNum);
+				$(col).bind("click", {rowNum: rowNum, colNum: colNum}, function(event) {
+					me.onCellClick(event.data.rowNum, event.data.colNum);
 				});
 			}
 		}
@@ -59,19 +59,31 @@ FourInARow.prototype = {
 		}
 	},
 	
-	onCellClick: function(colNum) {
+	/**
+	 * insert a disc into the specified column.
+	 * @return true if the move was possible (i.e. "something happened"), false else
+	 */
+	insertDisc: function(colNum) {
 		var cellValue = this.rot ? 1 : 2;
 		for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
-			if (rowNum < this.numRows - 1 && this.cellData[rowNum + 1][colNum] == 0 ) {
+			if (rowNum < this.numRows - 1 && this.cellData[rowNum + 1][colNum] == 0) {
 				continue;
 			} else {
 				if (this.cellData[rowNum][colNum] == 0) {
 					this.cellData[rowNum][colNum] = cellValue;
-					this.rot = !this.rot;
-					this.updateView();
-					break;
+					
+					return true;
 				}
 			}
+		}
+		return false;
+	},
+	
+	onCellClick: function(rowNum, colNum) {
+		var legalMove = this.insertDisc(colNum);
+		if (legalMove) {
+			this.rot = !this.rot;
+			this.updateView();
 		}
 	},
 	
