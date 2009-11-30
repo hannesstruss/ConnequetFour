@@ -1,7 +1,7 @@
-var ROWS = 6;
-var COLS = 7;
-
-function FourInARow(canvasID) {
+function FourInARow(canvasID, numRows, numCols) {
+	this.numRows = numRows;
+	this.numCols = numCols;
+	
 	this.canvas = this.createCanvas(canvasID);
 	this.initCellData();
 	this.addEventListeners();
@@ -30,12 +30,12 @@ FourInARow.prototype = {
 	createCanvas: function(canvasID) {
 		var canvas = []
 		
-		for (var rowNum = 0; rowNum < ROWS; rowNum++) {
+		for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
 			var row = [];
 			$("#" + canvasID).append('<div class="row clearfix"></div>');
 			var rowNode = $("#" + canvasID + " *:last");
 			
-			for (var colNum = 0; colNum < COLS; colNum++) {
+			for (var colNum = 0; colNum < this.numCols; colNum++) {
 				rowNode.append('<div class="cell"><div class="inner"></div></div>');
 				var cellNode = $("#" + canvasID + " .row:last .cell:last");
 				row.push(cellNode);
@@ -49,9 +49,9 @@ FourInARow.prototype = {
 	
 	initCellData: function() {
 		this.cellData = [];
-		for (var rowNum = 0; rowNum < ROWS; rowNum++) {
+		for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
 			var row = [];
-			for (var colNum = 0; colNum < COLS; colNum++) {
+			for (var colNum = 0; colNum < this.numCols; colNum++) {
 				row.push(0);
 			}
 			
@@ -61,8 +61,8 @@ FourInARow.prototype = {
 	
 	onCellClick: function(colNum) {
 		var cellValue = this.rot ? 1 : 2;
-		for (var rowNum = 0; rowNum < ROWS; rowNum++) {
-			if (rowNum < ROWS - 1 && this.cellData[rowNum + 1][colNum] == 0 ) {
+		for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
+			if (rowNum < this.numRows - 1 && this.cellData[rowNum + 1][colNum] == 0 ) {
 				continue;
 			} else {
 				if (this.cellData[rowNum][colNum] == 0) {
@@ -76,8 +76,8 @@ FourInARow.prototype = {
 	},
 	
 	updateView: function() {
-		for (var rowNum = 0; rowNum < this.canvas.length; rowNum++) {
-			for (var colNum = 0; colNum < row.length; colNum++) {
+		for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
+			for (var colNum = 0; colNum < this.numCols; colNum++) {
 				var cellClass = ["", "red", "yellow"][this.cellData[rowNum][colNum]];
 				$(this.canvas[rowNum][colNum]).addClass(cellClass);
 			}
@@ -85,4 +85,4 @@ FourInARow.prototype = {
 	}
 }
 
-var game = new FourInARow("game_canvas");
+var game = new FourInARow("game_canvas", 6, 7);
