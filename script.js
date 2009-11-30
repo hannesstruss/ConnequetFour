@@ -85,4 +85,3 @@ FourInARow.prototype = {
 	}
 }
 
-var game = new FourInARow("game_canvas", 6, 7);
