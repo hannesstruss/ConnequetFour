@@ -1,27 +1,8 @@
 var ROWS = 6;
 var COLS = 7;
 
-var canvas = []
-
-
-
-for (var rowNum = 0; rowNum < ROWS; rowNum++) {
-	var row = [];
-	$("#game_canvas").append('<div class="row clearfix"></div>');
-	var rowNode = $("#game_canvas *:last");
-	for (var colNum = 0; colNum < COLS; colNum++) {
-		rowNode.append('<div class="cell"><div class="inner"></div></div>');
-		var cellNode = $("#game_canvas .row:last .cell:last");
-		
-		row.push(cellNode);
-		
-	}
-	
-	canvas.push(row);
-}
-
-function FourInARow(canvas) {
-	this.canvas = canvas;
+function FourInARow(canvasID) {
+	this.canvas = this.createCanvas(canvasID);
 	this.initCellData();
 	this.addEventListeners();
 	this.rotIstAnDerReihe = this.rot = true;
@@ -44,6 +25,26 @@ FourInARow.prototype = {
 				});
 			}
 		}
+	},
+	
+	createCanvas: function(canvasID) {
+		var canvas = []
+		
+		for (var rowNum = 0; rowNum < ROWS; rowNum++) {
+			var row = [];
+			$("#" + canvasID).append('<div class="row clearfix"></div>');
+			var rowNode = $("#" + canvasID + " *:last");
+			
+			for (var colNum = 0; colNum < COLS; colNum++) {
+				rowNode.append('<div class="cell"><div class="inner"></div></div>');
+				var cellNode = $("#" + canvasID + " .row:last .cell:last");
+				row.push(cellNode);
+			}
+			
+			canvas.push(row);
+		}
+		
+		return canvas;
 	},
 	
 	initCellData: function() {
@@ -84,4 +85,4 @@ FourInARow.prototype = {
 	}
 }
 
-var game = new FourInARow(canvas);
+var game = new FourInARow("game_canvas");
