@@ -7,8 +7,8 @@ function FourInARow(canvasID, numRows, numCols) {
 	this.addEventListeners();
 	this.rotIstAnDerReihe = this.rot = true;
 	
-	this.playerRedName = window.prompt("Bitte geben Sie den Namen von Spieler 1 ein!");
-	this.playerYellowName = window.prompt("Bitte geben Sie den Namen von Spieler 2 ein!");
+	this.playerRedName = "";//window.prompt("Bitte geben Sie den Namen von Spieler 1 ein!");
+	this.playerYellowName = "";// window.prompt("Bitte geben Sie den Namen von Spieler 2 ein!");
 	
 	this.createFilters();
 	
@@ -129,13 +129,72 @@ FourInARow.prototype = {
 }
 
 function WinFilter(filterMatrix) {
-	this.matrix = filterMatrix;
 	this.width = filterMatrix[0].length;
 	this.height = filterMatrix.length;
+	
+	this.initCells(filterMatrix);
 }
+
 WinFilter.prototype = {
+	/**
+	 * checks if there is a winner in the given cellData array. 
+	 * returns an array of {row: x, col: y} which represent the 
+	 * cell positions of the cellData the winners discs are in (first found 
+	 * occurence of a winning line), 
+	 * null else.
+	 * 
+	 * @param {Array} cellData
+	 */
 	check: function(cellData) {
+		for (var offsetRow = 0; offsetRow < cellData.length - this.height + 1; offsetRow++) {
+			for (var offsetCol = 0; offsetCol < cellData[0].length - this.width + 1; offsetCol++) {
+				var contents = [];
+				for (var cellIndex = 0; cellIndex < this.cells.length; cellIndex++) {
+					var cell = this.cells[cellIndex];
+					contents.push(
+						cellData[offsetRow + cell.row][offsetCol + cell.col]
+					);
+				}
+				var first = contents[0];
+				var isWinner = true;
+				for (var n = 1; n < contents.length; n++) {
+					if (contents[n] != first || contents[n] == -1) {
+						isWinner = false;
+						break;
+					}
+				}
+				
+				if (isWinner) {
+					var result = [];
+					for (var cellIndex = 0; cellIndex < this.cells.length; cellIndex++) {
+						var cell = this.cells[cellIndex];
+						result.push({
+							row: offsetRow + cell.row,
+							col: offsetCol + cell.col
+						});
+					}
+					return result;
+				}
+			}
+		}
+		return null;
+	},
+	
+	initCells: function(matrix) {
+		this.cells = [];
 		
+		for (var rowNum = 0; rowNum < matrix.length; rowNum++) {
+			var row = matrix[rowNum];
+			for (var colNum = 0; colNum < row.length; colNum++) {
+				var colContent = row[colNum];
+				if (colContent == 1) {
+					this.cells.push({
+						row: rowNum,
+						col: colNum
+					});
+				}
+			}
+		}
 	}
 }
 
