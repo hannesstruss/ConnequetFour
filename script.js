@@ -15,6 +15,10 @@ function FourInARow(canvasID, numRows, numCols) {
 	$("#game_info").html("<h1><marquee><span class=\"red active\">" + this.playerRedName + "</span> VS <span class=\"yellow\">" + this.playerYellowName + "</span></marquee></h1>");
 }
 
+FourInARow.UNSET = 0;
+FourInARow.RED = 1;
+FourInARow.YELLOW = 2;
+
 FourInARow.prototype = {
 	addEventListeners: function() {
 		for (var rowNum = 0; rowNum < this.canvas.length; rowNum++) {
@@ -25,6 +29,16 @@ FourInARow.prototype = {
 				$(col).bind("click", {rowNum: rowNum, colNum: colNum}, function(event) {
 					me.onCellClick(event.data.rowNum, event.data.colNum);
 				});
+			}
+		}
+	},
+	
+	checkWinSituation: function() {
+		for (var n = 0; n < this.filters.length; n++) {
+			var filter = this.filters[n];
+			var cells = filter.check(this.cellData);
+			if (cells) {
+				alert("WIN " + ["", "ROT", "GELB"][this.cellData[cells[0].row][cells[0].col]]);
 			}
 		}
 	},
@@ -83,7 +97,7 @@ FourInARow.prototype = {
 		for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
 			var row = [];
 			for (var colNum = 0; colNum < this.numCols; colNum++) {
-				row.push(0);
+				row.push(FourInARow.UNSET);
 			}
 			
 			this.cellData.push(row);
@@ -115,6 +129,7 @@ FourInARow.prototype = {
 		if (legalMove) {
 			this.rot = !this.rot;
 			this.updateView();
+			this.checkWinSituation();
 		}
 	},
 	
@@ -158,7 +173,7 @@ WinFilter.prototype = {
 				var first = contents[0];
 				var isWinner = true;
 				for (var n = 1; n < contents.length; n++) {
-					if (contents[n] != first || contents[n] == -1) {
+					if (contents[n] != first || contents[n] == FourInARow.UNSET) {
 						isWinner = false;
 						break;
 					}
