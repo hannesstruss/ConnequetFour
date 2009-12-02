@@ -156,9 +156,9 @@ FourInARow.prototype = {
 		for (var n = 0; n < winnerCells.length; n++) {
 			var cell = winnerCells[n];
 			
-			var winCell = $(this.canvas[cell.row][cell.col]);
-			winCell.removeClass("red yellow");
-			winCell.addClass("win");
+			$(this.canvas[cell.row][cell.col])
+				.removeClass("red yellow")
+				.addClass("win");
 		}
 	},
 	
