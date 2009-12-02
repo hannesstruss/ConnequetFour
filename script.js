@@ -4,16 +4,13 @@ function FourInARow(containerID, numRows, numCols) {
 	
 	this.gameInfo = this.createGameInfo(containerID);
 	this.canvas = this.createCanvas(containerID);
+	
 	this.initCellData();
+	this.createFilters();
+	
 	this.addEventListeners();
 	this.rotIstAnDerReihe = this.rot = true;
 	
-	this.playerRedName = "";//window.prompt("Bitte geben Sie den Namen von Spieler 1 ein!");
-	this.playerYellowName = "";// window.prompt("Bitte geben Sie den Namen von Spieler 2 ein!");
-	
-	this.createFilters();
-	
-	//$("#game_info").html("<h1><marquee><span class=\"red active\">" + this.playerRedName + "</span> VS <span class=\"yellow\">" + this.playerYellowName + "</span></marquee></h1>");
 }
 
 FourInARow.UNSET = 0;
@@ -45,7 +42,6 @@ FourInARow.prototype = {
 	},
 	
 	createCanvas: function(containerID) {
-		$("#"+containerID).append('<div id="game_info"></div>');
 		$("#"+containerID).append('<div id="game_canvas"></div>');
 		
 		
@@ -97,8 +93,8 @@ FourInARow.prototype = {
 		this.filters = [horizontal, vertical, diagonal1, diagonal2];
 	},
 	
-	createGameInfo: function() {
-		
+	createGameInfo: function(containerID) {
+		$("#"+containerID).prepend('<div id="game_info"></div>');
 	},
 	
 	initCellData: function() {
