@@ -12,7 +12,7 @@ function FourInARow(canvasID, numRows, numCols) {
 	
 	this.createFilters();
 	
-	$("#game_info").html("<h1><marquee><span class=\"red active\">" + this.playerRedName + "</span> VS <span class=\"yellow\">" + this.playerYellowName + "</span></marquee></h1>");
+	//$("#game_info").html("<h1><marquee><span class=\"red active\">" + this.playerRedName + "</span> VS <span class=\"yellow\">" + this.playerYellowName + "</span></marquee></h1>");
 }
 
 FourInARow.UNSET = 0;

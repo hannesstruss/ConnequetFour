@@ -1,76 +1,37 @@
 html,body {
-	margin:0;
-	background: #dacfb5;
-	font-family: "Comic Sans MS",chalkboard;
-	position: relative
+	margin: 10px;
 }
-
 
 #game_canvas {
-	margin:10px auto 0;
-	width:840px;
+	width: 770px;
+	margin: 0 auto;
+	background: navy;
+	border: 15px navy solid;
+	-webkit-border-radius: 60px;
+	-webkit-box-shadow: 0 0 4px black;
 }
 
-#game_info {
-	color:#fff;
-	text-shadow: 10px 10px 10px #ffcc66;
-	position: absolute;
-	bottom:0;
-	left:0;
-	z-index: 10;
-	width:100%;
-}
-
-span.red {
-	color: red;
-}
-
-span.yellow {
-	color: yellow;
-}
-
-span.active {
-	text-decoration: blink;
-}
-
-.row {
-}
-div.cell {
-	float:left;
-	width:120px;
-	height:120px;
-	background:#131e62;
-	position:relative;
-}
-
-div.cell.red .inner {
-	background: #f00;
-}
-div.cell.yellow .inner {
+.cell.yellow .inner {
 	background: yellow;
+}
+.cell.red .inner {
+	background: red;
+}
+
+.cell {
+	float: left;
+	height: 100px;
+	padding: 5px;
 }
 
 .cell .inner {
-	position:absolute;
-	top:5px;
-	left:5px;
-	width:90px;
-	height:90px;
-	background: #dacfb5;
+	width:100px;
+	height:100px;
+	background: #BFDFED;
 	-webkit-border-radius:50px;
 	-moz-border-radius:50px;
 	cursor: pointer;
-	-webkit-box-shadow:5px 5px 10px black; 
 }
-.cell:hover .inner {
-	background: #b0a793;
-	-webkit-box-shadow:5px 5px 10px white; 
-}
-
-
-
-
-
 
 .clearfix:after {
 	content: ".";
