@@ -10,7 +10,7 @@ function FourInARow(containerID, numRows, numCols) {
 	
 	this.addEventListeners();
 	this.redsTurn = true;
-	
+	this.finished = false;
 }
 
 FourInARow.UNSET = 0;
@@ -36,14 +36,14 @@ FourInARow.prototype = {
 			var filter = this.filters[n];
 			var cells = filter.check(this.cellData);
 			if (cells) {
-				alert("WIN " + ["", "ROT", "GELB"][this.cellData[cells[0].row][cells[0].col]]);
+				this.finished = true;
+				this.notifyWin(cells);
 			}
 		}
 	},
 	
 	createCanvas: function(containerID) {
 		$("#"+containerID).append('<div id="game_canvas"></div>');
-		
 		
 		var canvas = []
 		
@@ -145,12 +145,20 @@ FourInARow.prototype = {
 		return false;
 	},
 	
+	notifyWin: function(winnerCells) {
+		var winnerIsRed = this.cellData[winnerCells[0].row][winnerCells[0].col] == 1;
+		this.updatePlayerNameView(winnerIsRed);
+		$(".win_message").removeClass("hidden");
+	},
+	
 	onCellClick: function(rowNum, colNum) {
-		var legalMove = this.insertDisc(colNum);
-		if (legalMove) {
-			this.redsTurn = !this.redsTurn;
-			this.updateView();
-			this.checkWinSituation();
+		if (!this.finished) {
+			var legalMove = this.insertDisc(colNum);
+			if (legalMove) {
+				this.redsTurn = !this.redsTurn;
+				this.updateView();
+				this.checkWinSituation();
+			}
 		}
 	},
 	
