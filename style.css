@@ -2,19 +2,26 @@ html,body {
 	margin: 10px;
 }
 
-#game_canvas {
-	width: 770px;
+#game_container {
+	width: 800px;
 	margin: 0 auto;
+}
+
+#game_canvas {
 	background: navy;
 	border: 15px navy solid;
 	-webkit-border-radius: 60px;
 	-webkit-box-shadow: 0 0 4px black;
 }
 
-.cell.yellow .inner {
+.cell.yellow .inner,
+.player_name.yellow
+{
 	background: yellow;
 }
-.cell.red .inner {
+.cell.red .inner,
+.player_name.red
+{
 	background: red;
 }
 
@@ -31,6 +38,39 @@ html,body {
 	-webkit-border-radius:50px;
 	-moz-border-radius:50px;
 	cursor: pointer;
+}
+
+#game_info {
+	font-size:32px;
+	font-weight: bold;
+	font-family: helvetica;
+	letter-spacing:-1;
+	color:#ccc;
+	padding:10px 50px;
+	line-height: 100%;
+}
+
+.player_name {
+	padding:0 10px;
+	color:white;
+	text-transform: uppercase;
+	-webkit-border-radius: 16px;
+}
+
+.move_info {
+	float: right;
+}
+
+.move_nr {
+	color: #666;
+}
+
+.win_message {
+	display: inline;
+}
+
+.win_message.hidden {
+	display: none;
 }
 
 .clearfix:after {

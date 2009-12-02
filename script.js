@@ -94,7 +94,23 @@ FourInARow.prototype = {
 	},
 	
 	createGameInfo: function(containerID) {
-		$("#"+containerID).prepend('<div id="game_info"></div>');
+		$("#"+containerID).prepend(
+			'<div id="game_info" class="clearfix">' +
+				'<span class="player_info">' +
+					'Player ' +
+					'<span class="player_name red">RED</span> ' +
+					'<div class="win_message hidden">WINS! <button>restart</button></div>' +
+				'</span>' +
+				'<span class="move_info">' +
+					'Move' +
+					'<span class="move_nr"></span>' + 
+				'</span>' +
+			'</div>'
+		);
+		
+		$("#"+containerID + " button").click(function() {
+			window.location.reload();
+		});
 	},
 	
 	initCellData: function() {
@@ -138,7 +154,15 @@ FourInARow.prototype = {
 		}
 	},
 	
+	updatePlayerNameView: function(isRed) {
+		$(".player_name").html(isRed ? "RED" : "YELLOW");
+		$(".player_name").addClass(isRed ? "red" : "yellow");
+		$(".player_name").removeClass(!isRed ? "red" : "yellow");
+	},
+	
 	updateView: function() {
+		this.updatePlayerNameView(this.redsTurn);
+		
 		for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
 			for (var colNum = 0; colNum < this.numCols; colNum++) {
 				var cellClass = ["", "red", "yellow"][this.cellData[rowNum][colNum]];
