@@ -1,8 +1,9 @@
-function FourInARow(canvasID, numRows, numCols) {
+function FourInARow(containerID, numRows, numCols) {
 	this.numRows = numRows;
 	this.numCols = numCols;
 	
-	this.canvas = this.createCanvas(canvasID);
+	this.gameInfo = this.createGameInfo(containerID);
+	this.canvas = this.createCanvas(containerID);
 	this.initCellData();
 	this.addEventListeners();
 	this.rotIstAnDerReihe = this.rot = true;
@@ -43,17 +44,21 @@ FourInARow.prototype = {
 		}
 	},
 	
-	createCanvas: function(canvasID) {
+	createCanvas: function(containerID) {
+		$("#"+containerID).append('<div id="game_info"></div>');
+		$("#"+containerID).append('<div id="game_canvas"></div>');
+		
+		
 		var canvas = []
 		
 		for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
 			var row = [];
-			$("#" + canvasID).append('<div class="row clearfix"></div>');
-			var rowNode = $("#" + canvasID + " *:last");
+			$("#game_canvas").append('<div class="row clearfix"></div>');
+			var rowNode = $("#game_canvas *:last");
 			
 			for (var colNum = 0; colNum < this.numCols; colNum++) {
 				rowNode.append('<div class="cell"><div class="inner"></div></div>');
-				var cellNode = $("#" + canvasID + " .row:last .cell:last");
+				var cellNode = $("#game_canvas .row:last .cell:last");
 				row.push(cellNode);
 			}
 			
@@ -90,6 +95,10 @@ FourInARow.prototype = {
 		]);
 		
 		this.filters = [horizontal, vertical, diagonal1, diagonal2];
+	},
+	
+	createGameInfo: function() {
+		
 	},
 	
 	initCellData: function() {
