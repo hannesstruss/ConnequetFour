@@ -109,12 +109,12 @@ FourInARow.prototype = {
 	 * @return true if the move was possible (i.e. "something happened"), false else
 	 */
 	insertDisc: function(colNum) {
-		var cellValue = this.rot ? 1 : 2;
+		var cellValue = this.rot ? FourInARow.RED : FourInARow.YELLOW;
 		for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
-			if (rowNum < this.numRows - 1 && this.cellData[rowNum + 1][colNum] == 0) {
+			if (rowNum < this.numRows - 1 && this.cellData[rowNum + 1][colNum] == FourInARow.UNSET) {
 				continue;
 			} else {
-				if (this.cellData[rowNum][colNum] == 0) {
+				if (this.cellData[rowNum][colNum] == FourInARow.UNSET) {
 					this.cellData[rowNum][colNum] = cellValue;
 					
 					return true;
