@@ -9,7 +9,7 @@ function FourInARow(containerID, numRows, numCols) {
 	this.createFilters();
 	
 	this.addEventListeners();
-	this.rotIstAnDerReihe = this.rot = true;
+	this.redsTurn = true;
 	
 }
 
@@ -114,7 +114,7 @@ FourInARow.prototype = {
 	 * @return true if the move was possible (i.e. "something happened"), false else
 	 */
 	insertDisc: function(colNum) {
-		var cellValue = this.rot ? FourInARow.RED : FourInARow.YELLOW;
+		var cellValue = this.redsTurn ? FourInARow.RED : FourInARow.YELLOW;
 		for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
 			if (rowNum < this.numRows - 1 && this.cellData[rowNum + 1][colNum] == FourInARow.UNSET) {
 				continue;
@@ -132,7 +132,7 @@ FourInARow.prototype = {
 	onCellClick: function(rowNum, colNum) {
 		var legalMove = this.insertDisc(colNum);
 		if (legalMove) {
-			this.rot = !this.rot;
+			this.redsTurn = !this.redsTurn;
 			this.updateView();
 			this.checkWinSituation();
 		}
