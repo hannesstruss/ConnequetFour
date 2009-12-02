@@ -156,8 +156,8 @@ FourInARow.prototype = {
 	
 	updatePlayerNameView: function(isRed) {
 		$(".player_name").html(isRed ? "RED" : "YELLOW");
-		$(".player_name").addClass(isRed ? "red" : "yellow");
-		$(".player_name").removeClass(!isRed ? "red" : "yellow");
+		$(".player_name").toggleClass("red", isRed);
+		$(".player_name").toggleClass("yellow", !isRed);
 	},
 	
 	updateView: function() {
