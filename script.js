@@ -11,6 +11,7 @@ function FourInARow(containerID, numRows, numCols) {
 	this.addEventListeners();
 	this.redsTurn = true;
 	this.finished = false;
+	this.moveNr = 0;
 }
 
 FourInARow.UNSET = 0;
@@ -102,8 +103,8 @@ FourInARow.prototype = {
 					'<div class="win_message hidden">WINS! <button>restart</button></div>' +
 				'</span>' +
 				'<span class="move_info">' +
-					'Move' +
-					'<span class="move_nr"></span>' + 
+					'Move ' +
+					'<span class="move_nr">1</span>' + 
 				'</span>' +
 			'</div>'
 		);
@@ -138,6 +139,8 @@ FourInARow.prototype = {
 				if (this.cellData[rowNum][colNum] == FourInARow.UNSET) {
 					this.cellData[rowNum][colNum] = cellValue;
 					
+					this.moveNr++;
+					
 					return true;
 				}
 			}
@@ -170,6 +173,7 @@ FourInARow.prototype = {
 	
 	updateView: function() {
 		this.updatePlayerNameView(this.redsTurn);
+		$(".move_nr").html(this.moveNr + 1);
 		
 		for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
 			for (var colNum = 0; colNum < this.numCols; colNum++) {
