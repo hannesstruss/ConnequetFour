@@ -152,6 +152,14 @@ FourInARow.prototype = {
 		var winnerIsRed = this.cellData[winnerCells[0].row][winnerCells[0].col] == 1;
 		this.updatePlayerNameView(winnerIsRed);
 		$(".win_message").removeClass("hidden");
+		
+		for (var n = 0; n < winnerCells.length; n++) {
+			var cell = winnerCells[n];
+			
+			var winCell = $(this.canvas[cell.row][cell.col]);
+			winCell.removeClass("red yellow");
+			winCell.addClass("win");
+		}
 	},
 	
 	onCellClick: function(rowNum, colNum) {

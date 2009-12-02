@@ -25,6 +25,10 @@ html,body {
 	background: red;
 }
 
+.cell.win .inner {
+	background: green;
+}
+
 .cell {
 	float: left;
 	height: 100px;
