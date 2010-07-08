@@ -1,60 +1,59 @@
-var FourInARow = (function() {
+var FourInARow = (function($) {
 	function FourInARow(containerID, numRows, numCols) {
-		this.numRows = numRows;
-		this.numCols = numCols;
+		var gameInfo,
+			canvas,
+			cellData,
+			filters,
+			redsTurn,
+			finished,
+			moveNr;
+			
+		function init() {
+			gameInfo = createGameInfo(containerID);
+			canvas = createCanvas(containerID);
+			cellData = initCellData();
+			filters = createFilters();
+			
+			addEventListeners();
+			redsTurn = true;
+			finished = false;
+			moveNr = 0;
+		}
 		
-		this.gameInfo = this.createGameInfo(containerID);
-		this.canvas = this.createCanvas(containerID);
-		
-		this.initCellData();
-		this.createFilters();
-		
-		this.addEventListeners();
-		this.redsTurn = true;
-		this.finished = false;
-		this.moveNr = 0;
-	}
-	
-	FourInARow.UNSET = 0;
-	FourInARow.RED = 1;
-	FourInARow.YELLOW = 2;
-	
-	FourInARow.prototype = {
-		addEventListeners: function() {
-			for (var rowNum = 0; rowNum < this.canvas.length; rowNum++) {
-				var row = this.canvas[rowNum];
+		function addEventListeners() {
+			for (var rowNum = 0; rowNum < canvas.length; rowNum++) {
+				var row = canvas[rowNum];
 				for (var colNum = 0; colNum < row.length; colNum++) {
 					var col = row[colNum];
-					var me = this;
 					$(col).bind("click", {rowNum: rowNum, colNum: colNum}, function(event) {
-						me.onCellClick(event.data.rowNum, event.data.colNum);
+						onCellClick(event.data.rowNum, event.data.colNum);
 					});
 				}
 			}
-		},
-		
-		checkWinSituation: function() {
-			for (var n = 0; n < this.filters.length; n++) {
-				var filter = this.filters[n];
-				var cells = filter.check(this.cellData);
+		}
+
+		function checkWinSituation() {
+			for (var n = 0; n < filters.length; n++) {
+				var filter = filters[n];
+				var cells = filter.check(cellData);
 				if (cells) {
-					this.finished = true;
-					this.notifyWin(cells);
+					finished = true;
+					notifyWin(cells);
 				}
 			}
-		},
-		
-		createCanvas: function(containerID) {
+		}
+
+		function createCanvas(containerID) {
 			$("#"+containerID).append('<div id="game_canvas"></div>');
 			
 			var canvas = []
 			
-			for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
+			for (var rowNum = 0; rowNum < numRows; rowNum++) {
 				var row = [];
 				$("#game_canvas").append('<div class="row clearfix"></div>');
 				var rowNode = $("#game_canvas *:last");
 				
-				for (var colNum = 0; colNum < this.numCols; colNum++) {
+				for (var colNum = 0; colNum < numCols; colNum++) {
 					rowNode.append('<div class="cell"><div class="inner"></div></div>');
 					var cellNode = $("#game_canvas .row:last .cell:last");
 					row.push(cellNode);
@@ -64,9 +63,9 @@ var FourInARow = (function() {
 			}
 			
 			return canvas;
-		},
+		}
 		
-		createFilters: function() {
+		function createFilters() {
 			var horizontal = new WinFilter([
 				[1, 1, 1, 1]
 			]);
@@ -92,10 +91,11 @@ var FourInARow = (function() {
 				[1, 0, 0, 0]
 			]);
 			
-			this.filters = [horizontal, vertical, diagonal1, diagonal2];
-		},
+			return [horizontal, vertical, diagonal1, diagonal2];
+		}
 		
-		createGameInfo: function(containerID) {
+		function createGameInfo(containerID) {
+
 			$("#"+containerID).prepend(
 				'<div id="game_info" class="clearfix">' +
 					'<span class="player_info">' +
@@ -113,85 +113,92 @@ var FourInARow = (function() {
 			$("#"+containerID + " button").click(function() {
 				window.location.reload();
 			});
-		},
+		}
 		
-		initCellData: function() {
-			this.cellData = [];
-			for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
+		function initCellData() {
+			var cellData = [];
+			for (var rowNum = 0; rowNum < numRows; rowNum++) {
 				var row = [];
-				for (var colNum = 0; colNum < this.numCols; colNum++) {
+				for (var colNum = 0; colNum < numCols; colNum++) {
 					row.push(FourInARow.UNSET);
 				}
 				
-				this.cellData.push(row);
+				cellData.push(row);
 			}
-		},
+			return cellData;
+		}
 		
 		/**
 		 * insert a disc into the specified column.
 		 * @return true if the move was possible (i.e. "something happened"), false else
 		 */
-		insertDisc: function(colNum) {
-			var cellValue = this.redsTurn ? FourInARow.RED : FourInARow.YELLOW;
-			for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
-				if (rowNum < this.numRows - 1 && this.cellData[rowNum + 1][colNum] == FourInARow.UNSET) {
+		function insertDisc(colNum) {
+			var cellValue = redsTurn ? FourInARow.RED : FourInARow.YELLOW;
+			for (var rowNum = 0; rowNum < numRows; rowNum++) {
+				if (rowNum < numRows - 1 && cellData[rowNum + 1][colNum] == FourInARow.UNSET) {
 					continue;
 				} else {
-					if (this.cellData[rowNum][colNum] == FourInARow.UNSET) {
-						this.cellData[rowNum][colNum] = cellValue;
+					if (cellData[rowNum][colNum] == FourInARow.UNSET) {
+						cellData[rowNum][colNum] = cellValue;
 						
-						this.moveNr++;
+						moveNr++;
 						
 						return true;
 					}
 				}
 			}
 			return false;
-		},
+		}
 		
-		notifyWin: function(winnerCells) {
-			var winnerIsRed = this.cellData[winnerCells[0].row][winnerCells[0].col] == 1;
-			this.updatePlayerNameView(winnerIsRed);
+		function notifyWin(winnerCells) {
+			var winnerIsRed = cellData[winnerCells[0].row][winnerCells[0].col] == 1;
+			updatePlayerNameView(winnerIsRed);
 			$(".win_message").removeClass("hidden");
 			
 			for (var n = 0; n < winnerCells.length; n++) {
 				var cell = winnerCells[n];
 				
-				$(this.canvas[cell.row][cell.col])
+				$(canvas[cell.row][cell.col])
 					.removeClass("red yellow")
 					.addClass("win");
 			}
-		},
+		}
 		
-		onCellClick: function(rowNum, colNum) {
-			if (!this.finished) {
-				var legalMove = this.insertDisc(colNum);
+		function onCellClick(rowNum, colNum) {
+			if (!finished) {
+				var legalMove = insertDisc(colNum);
 				if (legalMove) {
-					this.redsTurn = !this.redsTurn;
-					this.updateView();
-					this.checkWinSituation();
-				}
-			}
-		},
-		
-		updatePlayerNameView: function(isRed) {
-			$(".player_name").html(isRed ? "RED" : "YELLOW");
-			$(".player_name").toggleClass("red", isRed);
-			$(".player_name").toggleClass("yellow", !isRed);
-		},
-		
-		updateView: function() {
-			this.updatePlayerNameView(this.redsTurn);
-			$(".move_nr").html(this.moveNr + 1);
-			
-			for (var rowNum = 0; rowNum < this.numRows; rowNum++) {
-				for (var colNum = 0; colNum < this.numCols; colNum++) {
-					var cellClass = ["", "red", "yellow"][this.cellData[rowNum][colNum]];
-					$(this.canvas[rowNum][colNum]).addClass(cellClass);
+					redsTurn = !redsTurn;
+					updateView();
+					checkWinSituation();
 				}
 			}
 		}
+		
+		function updatePlayerNameView(isRed) {
+			$(".player_name").html(isRed ? "RED" : "YELLOW");
+			$(".player_name").toggleClass("red", isRed);
+			$(".player_name").toggleClass("yellow", !isRed);
+		}
+		
+		function updateView() {
+			updatePlayerNameView(redsTurn);
+			$(".move_nr").html(moveNr + 1);
+			
+			for (var rowNum = 0; rowNum < numRows; rowNum++) {
+				for (var colNum = 0; colNum < numCols; colNum++) {
+					var cellClass = ["", "red", "yellow"][cellData[rowNum][colNum]];
+					$(canvas[rowNum][colNum]).addClass(cellClass);
+				}
+			}
+		}
+		
+		init();
 	}
+	
+	FourInARow.UNSET = 0;
+	FourInARow.RED = 1;
+	FourInARow.YELLOW = 2;
 	
 	function WinFilter(filterMatrix) {
 		this.width = filterMatrix[0].length;
@@ -264,4 +271,4 @@ var FourInARow = (function() {
 	}
 	
 	return FourInARow;
-})();	
+})(jQuery);	
