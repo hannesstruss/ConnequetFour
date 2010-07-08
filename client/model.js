@@ -1,4 +1,4 @@
-var ConnectFourModel = (function($) {
+var ConnectFourModel = (function() {
 	var export = {};
 	
 	var State = { 
@@ -240,4 +240,4 @@ var ConnectFourModel = (function($) {
 	export.Game = Game;
 	
 	return export;
-})(jQuery);	
+})();	
