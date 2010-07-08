@@ -36,7 +36,7 @@ var ConnectFourView = (function ($) {
 		function create_canvas(container_id) {
 			$("#"+container_id).append('<div id="game_canvas"></div>');
 			
-			var canvas = []
+			var canvas = [];
 			
 			for (var rowNum = 0; rowNum < _model.numRows; rowNum++) {
 				var row = [];
