@@ -138,8 +138,10 @@ var ConnectFourModel = (function() {
 						_cellData[rowNum][colNum] = cellValue;
 						
 						_moveNr++;
-						_redsTurn = !_redsTurn;
 						checkWinSituation();
+						if (!_finished) {
+							_redsTurn = !_redsTurn;
+						}
 						
 						_event_dispatcher.dispatch_event({
 							type: Game.EVENT_TYPES.UPDATE

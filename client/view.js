@@ -104,7 +104,7 @@ var ConnectFourView = (function ($) {
 			update_view();
 		}
 		
-		function updatePlayerNameView(isRed) {
+		function update_player_name_view(isRed) {
 			// TODO don't use classnames, store references instead
 			$(".player_name").html(isRed ? "RED" : "YELLOW");
 			$(".player_name").toggleClass("red", isRed);
@@ -112,7 +112,7 @@ var ConnectFourView = (function ($) {
 		}
 		
 		function update_view() {
-			updatePlayerNameView(_model.is_reds_turn());
+			update_player_name_view(_model.is_reds_turn());
 			$(".move_nr").html(_model.get_move_nr() + 1);
 			
 			var cellData = _model.get_cell_data();
