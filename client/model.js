@@ -203,14 +203,14 @@ var ConnectFour = (function($) {
 	}
 	
 	function WinFilter(filterMatrix) {
-		var width,
-			height,
-			cells;
+		var _width,
+			_height,
+			_cells;
 		
 		function init() {
-			width = filterMatrix[0].length;
-			height = filterMatrix.length;
-			cells = initCells(filterMatrix);
+			_width = filterMatrix[0].length;
+			_height = filterMatrix.length;
+			_cells = initCells(filterMatrix);
 		}
 		
 		/**
@@ -223,11 +223,11 @@ var ConnectFour = (function($) {
 		 * @param {Array} cellData
 		 */
 		this.check = function check(cellData) {
-			for (var offsetRow = 0; offsetRow < cellData.length - height + 1; offsetRow++) {
-				for (var offsetCol = 0; offsetCol < cellData[0].length - width + 1; offsetCol++) {
+			for (var offsetRow = 0; offsetRow < cellData.length - _height + 1; offsetRow++) {
+				for (var offsetCol = 0; offsetCol < cellData[0].length - _width + 1; offsetCol++) {
 					var contents = [];
-					for (var cellIndex = 0; cellIndex < cells.length; cellIndex++) {
-						var cell = cells[cellIndex];
+					for (var cellIndex = 0; cellIndex < _cells.length; cellIndex++) {
+						var cell = _cells[cellIndex];
 						contents.push(
 							cellData[offsetRow + cell.row][offsetCol + cell.col]
 						);
@@ -243,8 +243,8 @@ var ConnectFour = (function($) {
 					
 					if (isWinner) {
 						var result = [];
-						for (var cellIndex = 0; cellIndex < cells.length; cellIndex++) {
-							var cell = cells[cellIndex];
+						for (var cellIndex = 0; cellIndex < _cells.length; cellIndex++) {
+							var cell = _cells[cellIndex];
 							result.push({
 								row: offsetRow + cell.row,
 								col: offsetCol + cell.col
