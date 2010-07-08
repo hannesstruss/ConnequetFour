@@ -15,6 +15,7 @@ var ConnectFourView = (function ($) {
 		function init() {
 			_model = model;
 			_model.add_event_listener(_model.get_event_types().WIN, on_win);
+			_model.add_event_listener(_model.get_event_types().UPDATE, on_update);
 			
 			create_game_info(container_id);
 			_canvas = create_canvas(container_id);
@@ -93,11 +94,14 @@ var ConnectFourView = (function ($) {
 		
 		function on_cell_click(rowNum, colNum) {
 			_model.insertDisc(colNum);
-			updateView();
 		}
 		
 		function on_win(event) {
 			display_win(event.winner_cells);
+		}
+		
+		function on_update(event) {
+			update_view();
 		}
 		
 		function updatePlayerNameView(isRed) {
@@ -107,7 +111,7 @@ var ConnectFourView = (function ($) {
 			$(".player_name").toggleClass("yellow", !isRed);
 		}
 		
-		function updateView() {
+		function update_view() {
 			updatePlayerNameView(_model.is_reds_turn());
 			$(".move_nr").html(_model.get_move_nr() + 1);
 			

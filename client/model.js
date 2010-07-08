@@ -141,10 +141,15 @@ var ConnectFourModel = (function() {
 						_redsTurn = !_redsTurn;
 						checkWinSituation();
 						
+						_event_dispatcher.dispatch_event({
+							type: Game.EVENT_TYPES.UPDATE
+						})
+						
 						return true;
 					}
 				}
 			}
+			
 			return false;
 		}
 		
