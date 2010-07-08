@@ -1,9 +1,10 @@
-var ConnectFour = (function(ConnectFourModel) {
+var ConnectFour = (function(ConnectFourModel, ConnectFourView) {
 	var export = {};
 	
 	function Game(containerID, numRows, numCols) {
 		function init() {
-			var game = new ConnectFourModel.Game(containerID, numRows, numCols);
+			var game = new ConnectFourModel.Game(numRows, numCols);
+			var view = new ConnectFourView.View(containerID, game);
 		}
 		
 		init();
@@ -12,4 +13,4 @@ var ConnectFour = (function(ConnectFourModel) {
 	export.Game = Game;
 	
 	return export;
-})(ConnectFourModel);
+})(ConnectFourModel, ConnectFourView);

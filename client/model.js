@@ -10,14 +10,11 @@ var ConnectFourModel = (function($) {
 	/**
 	 * The main game model. 
 	 */
-	function Game(containerID, numRows, numCols) {
+	function Game(numRows, numCols) {
+		this.numRows = numRows;
+		this.numCols = numCols;
+		
 		var 
-			/** 
-			 * The game's board view, a 2-dimensional field containing references to the cell-DIV-elements
-			 * (jQuery-wrapped) 
-			 */
-			_canvas,
-			
 			/** The game's state. A 2-dimensional field containing State.{UNSET, RED, YELLOW} */
 			_cellData,
 			
@@ -34,30 +31,14 @@ var ConnectFourModel = (function($) {
 			_moveNr;
 			
 		function init() {
-			createGameInfo(containerID);
-			
-			_canvas = createCanvas(containerID);
 			_cellData = initCellData();
 			_filters = createFilters();
 			
-			addEventListeners();
 			_redsTurn = true;
 			_finished = false;
 			_moveNr = 0;
 		}
 		
-		function addEventListeners() {
-			for (var rowNum = 0; rowNum < _canvas.length; rowNum++) {
-				var row = _canvas[rowNum];
-				for (var colNum = 0; colNum < row.length; colNum++) {
-					var col = row[colNum];
-					$(col).bind("click", {rowNum: rowNum, colNum: colNum}, function(event) {
-						onCellClick(event.data.rowNum, event.data.colNum);
-					});
-				}
-			}
-		}
-
 		function checkWinSituation() {
 			for (var n = 0; n < _filters.length; n++) {
 				var filter = _filters[n];
@@ -69,28 +50,6 @@ var ConnectFourModel = (function($) {
 			}
 		}
 
-		function createCanvas(containerID) {
-			$("#"+containerID).append('<div id="game_canvas"></div>');
-			
-			var canvas = []
-			
-			for (var rowNum = 0; rowNum < numRows; rowNum++) {
-				var row = [];
-				$("#game_canvas").append('<div class="row clearfix"></div>');
-				var rowNode = $("#game_canvas *:last");
-				
-				for (var colNum = 0; colNum < numCols; colNum++) {
-					rowNode.append('<div class="cell"><div class="inner"></div></div>');
-					var cellNode = $("#game_canvas .row:last .cell:last");
-					row.push(cellNode);
-				}
-				
-				canvas.push(row);
-			}
-			
-			return canvas;
-		}
-		
 		function createFilters() {
 			var horizontal = new WinFilter([
 				[1, 1, 1, 1]
@@ -118,26 +77,6 @@ var ConnectFourModel = (function($) {
 			]);
 			
 			return [horizontal, vertical, diagonal1, diagonal2];
-		}
-		
-		function createGameInfo(containerID) {
-			$("#"+containerID).prepend(
-				'<div id="game_info" class="clearfix">' +
-					'<span class="player_info">' +
-						'Player ' +
-						'<span class="player_name red">RED</span> ' +
-						'<div class="win_message hidden">WINS! <button>restart</button></div>' +
-					'</span>' +
-					'<span class="move_info">' +
-						'Move ' +
-						'<span class="move_nr">1</span>' + 
-					'</span>' +
-				'</div>'
-			);
-			
-			$("#"+containerID + " button").click(function() {
-				window.location.reload();
-			});
 		}
 		
 		function initCellData() {
