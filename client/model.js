@@ -17,6 +17,7 @@ var ConnectFour = (function($) {
 			
 		function init() {
 			createGameInfo(containerID);
+			
 			_canvas = createCanvas(containerID);
 			_cellData = initCellData();
 			_filters = createFilters();
