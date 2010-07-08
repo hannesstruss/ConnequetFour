@@ -1,15 +1,14 @@
 var FourInARow = (function($) {
 	function FourInARow(containerID, numRows, numCols) {
-		var gameInfo,
-			canvas,
-			cellData,
-			filters,
-			redsTurn,
-			finished,
-			moveNr;
+		var _canvas,
+			_cellData,
+			_filters,
+			_redsTurn,
+			_finished,
+			_moveNr;
 			
 		function init() {
-			gameInfo = createGameInfo(containerID);
+			createGameInfo(containerID);
 			canvas = createCanvas(containerID);
 			cellData = initCellData();
 			filters = createFilters();
@@ -95,7 +94,6 @@ var FourInARow = (function($) {
 		}
 		
 		function createGameInfo(containerID) {
-
 			$("#"+containerID).prepend(
 				'<div id="game_info" class="clearfix">' +
 					'<span class="player_info">' +
