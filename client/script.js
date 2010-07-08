@@ -203,13 +203,14 @@ var ConnectFour = (function($) {
 	}
 	
 	function WinFilter(filterMatrix) {
-		this.width = filterMatrix[0].length;
-		this.height = filterMatrix.length;
+		var width = filterMatrix[0].length;
+		var height = filterMatrix.length;
+		var cells;
 		
-		this.initCells(filterMatrix);
-	}
-	
-	WinFilter.prototype = {
+		function init() {
+			cells = initCells(filterMatrix);
+		}
+		
 		/**
 		 * checks if there is a winner in the given cellData array. 
 		 * returns an array of {row: x, col: y} which represent the 
@@ -219,12 +220,12 @@ var ConnectFour = (function($) {
 		 * 
 		 * @param {Array} cellData
 		 */
-		check: function(cellData) {
-			for (var offsetRow = 0; offsetRow < cellData.length - this.height + 1; offsetRow++) {
-				for (var offsetCol = 0; offsetCol < cellData[0].length - this.width + 1; offsetCol++) {
+		this.check = function check(cellData) {
+			for (var offsetRow = 0; offsetRow < cellData.length - height + 1; offsetRow++) {
+				for (var offsetCol = 0; offsetCol < cellData[0].length - width + 1; offsetCol++) {
 					var contents = [];
-					for (var cellIndex = 0; cellIndex < this.cells.length; cellIndex++) {
-						var cell = this.cells[cellIndex];
+					for (var cellIndex = 0; cellIndex < cells.length; cellIndex++) {
+						var cell = cells[cellIndex];
 						contents.push(
 							cellData[offsetRow + cell.row][offsetCol + cell.col]
 						);
@@ -240,8 +241,8 @@ var ConnectFour = (function($) {
 					
 					if (isWinner) {
 						var result = [];
-						for (var cellIndex = 0; cellIndex < this.cells.length; cellIndex++) {
-							var cell = this.cells[cellIndex];
+						for (var cellIndex = 0; cellIndex < cells.length; cellIndex++) {
+							var cell = cells[cellIndex];
 							result.push({
 								row: offsetRow + cell.row,
 								col: offsetCol + cell.col
@@ -252,24 +253,28 @@ var ConnectFour = (function($) {
 				}
 			}
 			return null;
-		},
+		}
 		
-		initCells: function(matrix) {
-			this.cells = [];
+		function initCells(matrix) {
+			var cells = [];
 			
 			for (var rowNum = 0; rowNum < matrix.length; rowNum++) {
 				var row = matrix[rowNum];
 				for (var colNum = 0; colNum < row.length; colNum++) {
 					var colContent = row[colNum];
 					if (colContent == 1) {
-						this.cells.push({
+						cells.push({
 							row: rowNum,
 							col: colNum
 						});
 					}
 				}
 			}
+			
+			return cells;
 		}
+		
+		init(); 
 	}
 	
 	export.Game = FourInARow;
