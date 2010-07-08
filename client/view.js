@@ -76,7 +76,27 @@ var ConnectFourView = (function ($) {
 		}
 		
 		function on_cell_click(rowNum, colNum) {
-			console.log("CLICK: " + rowNum + ", " + colNum);
+			_model.insertDisc(colNum);
+			updateView();
+		}
+		
+		function updatePlayerNameView(isRed) {
+			$(".player_name").html(isRed ? "RED" : "YELLOW");
+			$(".player_name").toggleClass("red", isRed);
+			$(".player_name").toggleClass("yellow", !isRed);
+		}
+		
+		function updateView() {
+			updatePlayerNameView(_model.is_reds_turn());
+			$(".move_nr").html(_model.get_move_nr() + 1);
+			
+			var cellData = _model.get_cell_data();
+			for (var rowNum = 0; rowNum < cellData.length; rowNum++) {
+				for (var colNum = 0; colNum < cellData[rowNum].length; colNum++) {
+					var cellClass = ["", "red", "yellow"][cellData[rowNum][colNum]];
+					$(_canvas[rowNum][colNum]).addClass(cellClass);
+				}
+			}
 		}
 		
 		init();

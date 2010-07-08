@@ -45,7 +45,7 @@ var ConnectFourModel = (function() {
 				var cells = filter.check(_cellData);
 				if (cells) {
 					_finished = true;
-					notifyWin(cells);
+					//notifyWin(cells);
 				}
 			}
 		}
@@ -79,6 +79,14 @@ var ConnectFourModel = (function() {
 			return [horizontal, vertical, diagonal1, diagonal2];
 		}
 		
+		this.get_cell_data = function get_cell_data() {
+			return _cellData;
+		}
+		
+		this.get_move_nr = function get_move_nr() {
+			return _moveNr;
+		}
+		
 		function initCellData() {
 			var cellData = [];
 			for (var rowNum = 0; rowNum < numRows; rowNum++) {
@@ -96,7 +104,11 @@ var ConnectFourModel = (function() {
 		 * insert a disc into the specified column.
 		 * @return true if the move was possible (i.e. "something happened"), false else
 		 */
-		function insertDisc(colNum) {
+		this.insertDisc = function insertDisc(colNum) {
+			if (_finished) {
+				return;
+			}
+			
 			var cellValue = _redsTurn ? State.RED : State.YELLOW;
 			for (var rowNum = 0; rowNum < numRows; rowNum++) {
 				if (rowNum < numRows - 1 && _cellData[rowNum + 1][colNum] == State.UNSET) {
@@ -106,6 +118,8 @@ var ConnectFourModel = (function() {
 						_cellData[rowNum][colNum] = cellValue;
 						
 						_moveNr++;
+						_redsTurn = !_redsTurn;
+						checkWinSituation();
 						
 						return true;
 					}
@@ -114,9 +128,12 @@ var ConnectFourModel = (function() {
 			return false;
 		}
 		
+		this.is_reds_turn = function is_reds_turn() {
+			return _redsTurn;
+		}
+		
 		function notifyWin(winnerCells) {
 			var winnerIsRed = _cellData[winnerCells[0].row][winnerCells[0].col] == State.RED;
-			updatePlayerNameView(winnerIsRed);
 			$(".win_message").removeClass("hidden");
 			
 			for (var n = 0; n < winnerCells.length; n++) {
@@ -133,26 +150,7 @@ var ConnectFourModel = (function() {
 				var legalMove = insertDisc(colNum);
 				if (legalMove) {
 					_redsTurn = !_redsTurn;
-					updateView();
 					checkWinSituation();
-				}
-			}
-		}
-		
-		function updatePlayerNameView(isRed) {
-			$(".player_name").html(isRed ? "RED" : "YELLOW");
-			$(".player_name").toggleClass("red", isRed);
-			$(".player_name").toggleClass("yellow", !isRed);
-		}
-		
-		function updateView() {
-			updatePlayerNameView(_redsTurn);
-			$(".move_nr").html(_moveNr + 1);
-			
-			for (var rowNum = 0; rowNum < numRows; rowNum++) {
-				for (var colNum = 0; colNum < numCols; colNum++) {
-					var cellClass = ["", "red", "yellow"][_cellData[rowNum][colNum]];
-					$(_canvas[rowNum][colNum]).addClass(cellClass);
 				}
 			}
 		}
