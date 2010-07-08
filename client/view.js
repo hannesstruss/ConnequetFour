@@ -14,14 +14,15 @@ var ConnectFourView = (function ($) {
 		
 		function init() {
 			_model = model;
+			_model.add_event_listener(_model.get_event_types().WIN, on_win);
 			
 			create_game_info(container_id);
 			_canvas = create_canvas(container_id);
 			
-			add_event_listeners();
+			add_cell_event_listeners();
 		}
 		
-		function add_event_listeners() {
+		function add_cell_event_listeners() {
 			for (var rowNum = 0; rowNum < _canvas.length; rowNum++) {
 				var row = _canvas[rowNum];
 				for (var colNum = 0; colNum < row.length; colNum++) {
@@ -76,9 +77,27 @@ var ConnectFourView = (function ($) {
 			});
 		}
 		
+		function display_win(winnerCells) {
+			// TODO show correct winner
+			//var winnerIsRed = _cellData[winnerCells[0].row][winnerCells[0].col] == State.RED;
+			$(".win_message").removeClass("hidden");
+			
+			for (var n = 0; n < winnerCells.length; n++) {
+				var cell = winnerCells[n];
+				
+				$(_canvas[cell.row][cell.col])
+					.removeClass("red yellow")
+					.addClass("win");
+			}
+		}
+		
 		function on_cell_click(rowNum, colNum) {
 			_model.insertDisc(colNum);
 			updateView();
+		}
+		
+		function on_win(event) {
+			display_win(event.winner_cells);
 		}
 		
 		function updatePlayerNameView(isRed) {

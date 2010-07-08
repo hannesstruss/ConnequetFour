@@ -11,6 +11,11 @@ var ConnectFourModel = (function() {
 	 * The main game model. 
 	 */
 	function Game(numRows, numCols) {
+		Game.EVENT_TYPES = {
+			WIN: "ConnectFourModel.Game.WIN",
+			UPDATE: "ConnectFourModel.Game.UPDATE"
+		}
+		
 		this.numRows = numRows;
 		this.numCols = numCols;
 		
@@ -28,9 +33,13 @@ var ConnectFourModel = (function() {
 			_finished,
 			
 			/** incremented with each move a player conducts */
-			_moveNr;
+			_moveNr,
+			
+			_event_dispatcher;
 			
 		function init() {
+			_event_dispatcher = new HSEvent.EventDispatcher();
+			
 			_cellData = initCellData();
 			_filters = createFilters();
 			
@@ -39,13 +48,20 @@ var ConnectFourModel = (function() {
 			_moveNr = 0;
 		}
 		
+		this.add_event_listener = function add_event_listener(type, handler) {
+			_event_dispatcher.add_event_listener(type, handler);
+		}
+		
 		function checkWinSituation() {
 			for (var n = 0; n < _filters.length; n++) {
 				var filter = _filters[n];
 				var cells = filter.check(_cellData);
 				if (cells) {
 					_finished = true;
-					//notifyWin(cells);
+					_event_dispatcher.dispatch_event({
+						type: Game.EVENT_TYPES.WIN,
+						winner_cells: cells
+					});
 				}
 			}
 		}
@@ -81,6 +97,10 @@ var ConnectFourModel = (function() {
 		
 		this.get_cell_data = function get_cell_data() {
 			return _cellData;
+		}
+		
+		this.get_event_types = function get_event_types() {
+			return Game.EVENT_TYPES;
 		}
 		
 		this.get_move_nr = function get_move_nr() {
@@ -130,19 +150,6 @@ var ConnectFourModel = (function() {
 		
 		this.is_reds_turn = function is_reds_turn() {
 			return _redsTurn;
-		}
-		
-		function notifyWin(winnerCells) {
-			var winnerIsRed = _cellData[winnerCells[0].row][winnerCells[0].col] == State.RED;
-			$(".win_message").removeClass("hidden");
-			
-			for (var n = 0; n < winnerCells.length; n++) {
-				var cell = winnerCells[n];
-				
-				$(_canvas[cell.row][cell.col])
-					.removeClass("red yellow")
-					.addClass("win");
-			}
 		}
 		
 		function onCellClick(rowNum, colNum) {
