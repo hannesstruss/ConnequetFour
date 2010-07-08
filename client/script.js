@@ -1,4 +1,12 @@
-var FourInARow = (function($) {
+var ConnectFour = (function($) {
+	var export = {};
+	
+	var State = { 
+		UNSET: 0,
+		RED: 1,
+		YELLOW: 2
+	};
+	
 	function FourInARow(containerID, numRows, numCols) {
 		var _canvas,
 			_cellData,
@@ -9,19 +17,19 @@ var FourInARow = (function($) {
 			
 		function init() {
 			createGameInfo(containerID);
-			canvas = createCanvas(containerID);
-			cellData = initCellData();
-			filters = createFilters();
+			_canvas = createCanvas(containerID);
+			_cellData = initCellData();
+			_filters = createFilters();
 			
 			addEventListeners();
-			redsTurn = true;
-			finished = false;
-			moveNr = 0;
+			_redsTurn = true;
+			_finished = false;
+			_moveNr = 0;
 		}
 		
 		function addEventListeners() {
-			for (var rowNum = 0; rowNum < canvas.length; rowNum++) {
-				var row = canvas[rowNum];
+			for (var rowNum = 0; rowNum < _canvas.length; rowNum++) {
+				var row = _canvas[rowNum];
 				for (var colNum = 0; colNum < row.length; colNum++) {
 					var col = row[colNum];
 					$(col).bind("click", {rowNum: rowNum, colNum: colNum}, function(event) {
@@ -32,11 +40,11 @@ var FourInARow = (function($) {
 		}
 
 		function checkWinSituation() {
-			for (var n = 0; n < filters.length; n++) {
-				var filter = filters[n];
-				var cells = filter.check(cellData);
+			for (var n = 0; n < _filters.length; n++) {
+				var filter = _filters[n];
+				var cells = filter.check(_cellData);
 				if (cells) {
-					finished = true;
+					_finished = true;
 					notifyWin(cells);
 				}
 			}
@@ -118,7 +126,7 @@ var FourInARow = (function($) {
 			for (var rowNum = 0; rowNum < numRows; rowNum++) {
 				var row = [];
 				for (var colNum = 0; colNum < numCols; colNum++) {
-					row.push(FourInARow.UNSET);
+					row.push(State.UNSET);
 				}
 				
 				cellData.push(row);
@@ -131,15 +139,15 @@ var FourInARow = (function($) {
 		 * @return true if the move was possible (i.e. "something happened"), false else
 		 */
 		function insertDisc(colNum) {
-			var cellValue = redsTurn ? FourInARow.RED : FourInARow.YELLOW;
+			var cellValue = _redsTurn ? State.RED : State.YELLOW;
 			for (var rowNum = 0; rowNum < numRows; rowNum++) {
-				if (rowNum < numRows - 1 && cellData[rowNum + 1][colNum] == FourInARow.UNSET) {
+				if (rowNum < numRows - 1 && _cellData[rowNum + 1][colNum] == State.UNSET) {
 					continue;
 				} else {
-					if (cellData[rowNum][colNum] == FourInARow.UNSET) {
-						cellData[rowNum][colNum] = cellValue;
+					if (_cellData[rowNum][colNum] == State.UNSET) {
+						_cellData[rowNum][colNum] = cellValue;
 						
-						moveNr++;
+						_moveNr++;
 						
 						return true;
 					}
@@ -149,24 +157,24 @@ var FourInARow = (function($) {
 		}
 		
 		function notifyWin(winnerCells) {
-			var winnerIsRed = cellData[winnerCells[0].row][winnerCells[0].col] == 1;
+			var winnerIsRed = _cellData[winnerCells[0].row][winnerCells[0].col] == State.RED;
 			updatePlayerNameView(winnerIsRed);
 			$(".win_message").removeClass("hidden");
 			
 			for (var n = 0; n < winnerCells.length; n++) {
 				var cell = winnerCells[n];
 				
-				$(canvas[cell.row][cell.col])
+				$(_canvas[cell.row][cell.col])
 					.removeClass("red yellow")
 					.addClass("win");
 			}
 		}
 		
 		function onCellClick(rowNum, colNum) {
-			if (!finished) {
+			if (!_finished) {
 				var legalMove = insertDisc(colNum);
 				if (legalMove) {
-					redsTurn = !redsTurn;
+					_redsTurn = !_redsTurn;
 					updateView();
 					checkWinSituation();
 				}
@@ -180,23 +188,19 @@ var FourInARow = (function($) {
 		}
 		
 		function updateView() {
-			updatePlayerNameView(redsTurn);
-			$(".move_nr").html(moveNr + 1);
+			updatePlayerNameView(_redsTurn);
+			$(".move_nr").html(_moveNr + 1);
 			
 			for (var rowNum = 0; rowNum < numRows; rowNum++) {
 				for (var colNum = 0; colNum < numCols; colNum++) {
-					var cellClass = ["", "red", "yellow"][cellData[rowNum][colNum]];
-					$(canvas[rowNum][colNum]).addClass(cellClass);
+					var cellClass = ["", "red", "yellow"][_cellData[rowNum][colNum]];
+					$(_canvas[rowNum][colNum]).addClass(cellClass);
 				}
 			}
 		}
 		
 		init();
 	}
-	
-	FourInARow.UNSET = 0;
-	FourInARow.RED = 1;
-	FourInARow.YELLOW = 2;
 	
 	function WinFilter(filterMatrix) {
 		this.width = filterMatrix[0].length;
@@ -228,7 +232,7 @@ var FourInARow = (function($) {
 					var first = contents[0];
 					var isWinner = true;
 					for (var n = 1; n < contents.length; n++) {
-						if (contents[n] != first || contents[n] == FourInARow.UNSET) {
+						if (contents[n] != first || contents[n] == State.UNSET) {
 							isWinner = false;
 							break;
 						}
@@ -268,5 +272,7 @@ var FourInARow = (function($) {
 		}
 	}
 	
-	return FourInARow;
+	export.Game = FourInARow;
+	
+	return export;
 })(jQuery);	
