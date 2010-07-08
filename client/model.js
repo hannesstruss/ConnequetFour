@@ -1,4 +1,4 @@
-var ConnectFour = (function($) {
+var ConnectFourModel = (function($) {
 	var export = {};
 	
 	var State = { 
