@@ -37,7 +37,6 @@ var ConnectFourModel = (function($) {
 			createGameInfo(containerID);
 			
 			_canvas = createCanvas(containerID);
-			console.log(_canvas);
 			_cellData = initCellData();
 			_filters = createFilters();
 			
