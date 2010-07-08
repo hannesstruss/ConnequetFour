@@ -7,7 +7,7 @@ var ConnectFour = (function($) {
 		YELLOW: 2
 	};
 	
-	function FourInARow(containerID, numRows, numCols) {
+	function Game(containerID, numRows, numCols) {
 		var _canvas,
 			_cellData,
 			_filters,
@@ -280,7 +280,7 @@ var ConnectFour = (function($) {
 		init(); 
 	}
 	
-	export.Game = FourInARow;
+	export.Game = Game;
 	
 	return export;
 })(jQuery);	
