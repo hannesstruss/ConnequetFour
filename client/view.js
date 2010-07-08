@@ -17,6 +17,7 @@ var ConnectFourView = (function ($) {
 			
 			create_game_info(container_id);
 			_canvas = create_canvas(container_id);
+			
 			add_event_listeners();
 		}
 		
@@ -81,6 +82,7 @@ var ConnectFourView = (function ($) {
 		}
 		
 		function updatePlayerNameView(isRed) {
+			// TODO don't use classnames, store references instead
 			$(".player_name").html(isRed ? "RED" : "YELLOW");
 			$(".player_name").toggleClass("red", isRed);
 			$(".player_name").toggleClass("yellow", !isRed);
