@@ -203,11 +203,13 @@ var ConnectFour = (function($) {
 	}
 	
 	function WinFilter(filterMatrix) {
-		var width = filterMatrix[0].length;
-		var height = filterMatrix.length;
-		var cells;
+		var width,
+			height,
+			cells;
 		
 		function init() {
+			width = filterMatrix[0].length;
+			height = filterMatrix.length;
 			cells = initCells(filterMatrix);
 		}
 		
