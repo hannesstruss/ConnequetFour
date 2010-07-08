@@ -7,18 +7,37 @@ var ConnectFour = (function($) {
 		YELLOW: 2
 	};
 	
+	/**
+	 * The main game model. 
+	 */
 	function Game(containerID, numRows, numCols) {
-		var _canvas,
+		var 
+			/** 
+			 * The game's board view, a 2-dimensional field containing references to the cell-DIV-elements
+			 * (jQuery-wrapped) 
+			 */
+			_canvas,
+			
+			/** The game's state. A 2-dimensional field containing State.{UNSET, RED, YELLOW} */
 			_cellData,
+			
+			/** Array of filters that are used to check whether some player has won */
 			_filters,
+			
+			/** true if it's the red player's turn */
 			_redsTurn,
+			
+			/** true if some player has won */
 			_finished,
+			
+			/** incremented with each move a player conducts */
 			_moveNr;
 			
 		function init() {
 			createGameInfo(containerID);
 			
 			_canvas = createCanvas(containerID);
+			console.log(_canvas);
 			_cellData = initCellData();
 			_filters = createFilters();
 			
