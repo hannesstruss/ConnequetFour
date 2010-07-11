@@ -27,7 +27,7 @@ var ConnectFourModel = (function() {
 			_filters,
 			
 			/** true if it's the red player's turn */
-			_redsTurn,
+			_reds_turn,
 			
 			/** true if some player has won */
 			_finished,
@@ -43,7 +43,7 @@ var ConnectFourModel = (function() {
 			_cellData = init_cell_data();
 			_filters = create_filters();
 			
-			_redsTurn = true;
+			_reds_turn = true;
 			_finished = false;
 			_moveNr = 0;
 		}
@@ -129,7 +129,7 @@ var ConnectFourModel = (function() {
 				return;
 			}
 			
-			var cellValue = _redsTurn ? State.RED : State.YELLOW;
+			var cellValue = _reds_turn ? State.RED : State.YELLOW;
 			for (var rowNum = 0; rowNum < num_rows; rowNum++) {
 				if (rowNum < num_rows - 1 && _cellData[rowNum + 1][colNum] == State.UNSET) {
 					continue;
@@ -140,7 +140,7 @@ var ConnectFourModel = (function() {
 						_moveNr++;
 						check_win_situation();
 						if (!_finished) {
-							_redsTurn = !_redsTurn;
+							_reds_turn = !_reds_turn;
 						}
 						
 						_event_dispatcher.dispatch_event({
@@ -156,21 +156,21 @@ var ConnectFourModel = (function() {
 		}
 		
 		this.is_reds_turn = function is_reds_turn() {
-			return _redsTurn;
+			return _reds_turn;
 		}
 		
 		init();
 	}
 	
-	function WinFilter(filterMatrix) {
+	function WinFilter(filter_matrix) {
 		var _width,
 			_height,
 			_cells;
 		
 		function init() {
-			_width = filterMatrix[0].length;
-			_height = filterMatrix.length;
-			_cells = init_cells(filterMatrix);
+			_width = filter_matrix[0].length;
+			_height = filter_matrix.length;
+			_cells = init_cells(filter_matrix);
 		}
 		
 		/**
