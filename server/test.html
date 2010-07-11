@@ -9,6 +9,7 @@
 <body>
 
 <button id="b">Hallo</button>
+<div id="output" style="font-family: monospace;"></div>
 
 <script type="text/javascript" src="../client/jquery-1.4.2.js"></script>
 <script type="text/javascript">
@@ -18,7 +19,16 @@
 	(function($) {
 		
 		$("#b").bind("click", function() {
-			$.post("/cfour_be/register_session");
+			$.post("/cfour_be/register_session", function(data) {
+				$("#output").html(data["session_id"]);
+				console.log(data);
+			});
+			(function poll() {
+				$.get("/cfour_be/poll", function(data) {
+					console.log(data);
+					poll();
+				});
+			})();
 		});
 		
 	})(jQuery);

@@ -6,10 +6,12 @@ var http = require("http"),
 function Bootstrap() {
 	var
 		_post_map,
+		_get_map,
 		_server;
 		
 	function init() {
 		_post_map = {};
+		_get_map = {};
 		
 		_server = http.createServer(handle_request);
 	}
@@ -31,6 +33,16 @@ function Bootstrap() {
 					fail_404(res);
 				}
 				break;
+				
+			case "get":
+			case "head":
+				if (_get_map[parsed.pathname]) {
+					_get_map[parsed.pathname](req, res);
+				} else {
+					fail_404(res);
+				}
+				break;
+				
 			default:
 				fail_404(res);
 		}
@@ -49,6 +61,10 @@ function Bootstrap() {
 	
 	this.post = function post(path, handler) {
 		_post_map[path] = handler;
+	}
+	
+	this.get = function get(path, handler) {
+		_get_map[path] = handler;
 	}
 	
 	init();
