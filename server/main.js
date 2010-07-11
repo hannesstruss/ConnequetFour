@@ -20,8 +20,6 @@ var sys = require('sys'),
 		
 		bs.ok(res, "application/json");
 		res.end(JSON.stringify(result));
-		console.log("HIER!! " + JSON.stringify(result));
-		
 	});
 	
 	bs.listen(8124);
