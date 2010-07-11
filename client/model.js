@@ -170,7 +170,7 @@ var ConnectFourModel = (function() {
 		function init() {
 			_width = filterMatrix[0].length;
 			_height = filterMatrix.length;
-			_cells = initCells(filterMatrix);
+			_cells = init_cells(filterMatrix);
 		}
 		
 		/**
@@ -217,7 +217,7 @@ var ConnectFourModel = (function() {
 			return null;
 		}
 		
-		function initCells(matrix) {
+		function init_cells(matrix) {
 			var cells = [];
 			
 			for (var rowNum = 0; rowNum < matrix.length; rowNum++) {
