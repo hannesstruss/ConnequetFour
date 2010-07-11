@@ -1,5 +1,5 @@
 var ConnectFourView = (function ($) {
-	var export = {};
+	var exports = {};
 	
 	function View(container_id, model) {
 		var 
@@ -127,7 +127,7 @@ var ConnectFourView = (function ($) {
 		init();
 	}
 	
-	export.View = View;
+	exports.View = View;
 	
-	return export;
+	return exports;
 })(jQuery);
