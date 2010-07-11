@@ -19,7 +19,7 @@ var sys = require('sys'),
 			session_id: client.get_session_id()
 		};
 		
-		bs.ok(res, "application/json");
+		bs.ok(res);
 		res.end(JSON.stringify(result));
 	});
 	
@@ -28,7 +28,7 @@ var sys = require('sys'),
 		console.log(JSON.stringify(qp));
 		
 		setTimeout(function() {
-			bs.ok(res, "application/json");
+			bs.ok(res);
 			res.end(JSON.stringify({
 				op: "nop"
 			}));

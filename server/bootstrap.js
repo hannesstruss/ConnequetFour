@@ -55,7 +55,7 @@ function Bootstrap() {
 	
 	this.ok = function ok(res, content_type) {
 		res.writeHead(200, {
-			'Content-type': content_type
+			'Content-type': content_type || "application/json"
 		});
 	}
 	
