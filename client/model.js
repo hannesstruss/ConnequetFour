@@ -10,14 +10,14 @@ var ConnectFourModel = (function() {
 	/**
 	 * The main game model. 
 	 */
-	function Game(numRows, numCols) {
+	function Game(num_rows, num_cols) {
 		Game.EVENT_TYPES = {
 			WIN: "ConnectFourModel.Game.WIN",
 			UPDATE: "ConnectFourModel.Game.UPDATE"
 		}
 		
-		this.numRows = numRows;
-		this.numCols = numCols;
+		this.num_rows = num_rows;
+		this.num_cols = num_cols;
 		
 		var 
 			/** The game's state. A 2-dimensional field containing State.{UNSET, RED, YELLOW} */
@@ -109,9 +109,9 @@ var ConnectFourModel = (function() {
 		
 		function initCellData() {
 			var cellData = [];
-			for (var rowNum = 0; rowNum < numRows; rowNum++) {
+			for (var rowNum = 0; rowNum < num_rows; rowNum++) {
 				var row = [];
-				for (var colNum = 0; colNum < numCols; colNum++) {
+				for (var colNum = 0; colNum < num_cols; colNum++) {
 					row.push(State.UNSET);
 				}
 				
@@ -130,8 +130,8 @@ var ConnectFourModel = (function() {
 			}
 			
 			var cellValue = _redsTurn ? State.RED : State.YELLOW;
-			for (var rowNum = 0; rowNum < numRows; rowNum++) {
-				if (rowNum < numRows - 1 && _cellData[rowNum + 1][colNum] == State.UNSET) {
+			for (var rowNum = 0; rowNum < num_rows; rowNum++) {
+				if (rowNum < num_rows - 1 && _cellData[rowNum + 1][colNum] == State.UNSET) {
 					continue;
 				} else {
 					if (_cellData[rowNum][colNum] == State.UNSET) {
