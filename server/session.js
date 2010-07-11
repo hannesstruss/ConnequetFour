@@ -32,9 +32,11 @@
 			_clients = {};
 		}
 		
-		this.register_client = function register_client() {
-			
+		this.register_client = function register_client(client) {
+			_clients[client.get_session_id()] = client;
 		}
+		
+		init();
 	}
 
 	exports.SessionManager = SessionManager;
