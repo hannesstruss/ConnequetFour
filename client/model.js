@@ -33,7 +33,7 @@ var ConnectFourModel = (function() {
 			_finished,
 			
 			/** incremented with each move a player conducts */
-			_moveNr,
+			_move_nr,
 			
 			_event_dispatcher;
 			
@@ -45,7 +45,7 @@ var ConnectFourModel = (function() {
 			
 			_reds_turn = true;
 			_finished = false;
-			_moveNr = 0;
+			_move_nr = 0;
 		}
 		
 		this.add_event_listener = function add_event_listener(type, handler) {
@@ -104,7 +104,7 @@ var ConnectFourModel = (function() {
 		}
 		
 		this.get_move_nr = function get_move_nr() {
-			return _moveNr;
+			return _move_nr;
 		}
 		
 		function init_cell_data() {
@@ -136,9 +136,9 @@ var ConnectFourModel = (function() {
 					continue;
 				} else {
 					if (_cell_data[rowNum][colNum] == State.UNSET) {
-						_cell_data[rowNum][colNum] = cellValue;
+						_cell_data[rowNum][colNum] = cell_value;
 						
-						_moveNr++;
+						_move_nr++;
 						check_win_situation();
 						if (!_finished) {
 							_reds_turn = !_reds_turn;
