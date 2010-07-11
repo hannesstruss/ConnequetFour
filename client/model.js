@@ -124,7 +124,7 @@ var ConnectFourModel = (function() {
 		 * insert a disc into the specified column.
 		 * @return true if the move was possible (i.e. "something happened"), false else
 		 */
-		this.insertDisc = function insertDisc(colNum) {
+		this.insert_disc = function insert_disc(colNum) {
 			if (_finished) {
 				return;
 			}

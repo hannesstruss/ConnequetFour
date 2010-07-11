@@ -93,7 +93,7 @@ var ConnectFourView = (function ($) {
 		}
 		
 		function on_cell_click(rowNum, colNum) {
-			_model.insertDisc(colNum);
+			_model.insert_disc(colNum);
 		}
 		
 		function on_win(event) {
