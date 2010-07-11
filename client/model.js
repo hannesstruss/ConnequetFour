@@ -1,4 +1,4 @@
-var ConnectFour = (function($) {
+var ConnectFourModel = (function() {
 	var export = {};
 	
 	var State = { 
@@ -7,72 +7,65 @@ var ConnectFour = (function($) {
 		YELLOW: 2
 	};
 	
-	function Game(containerID, numRows, numCols) {
-		var _canvas,
+	/**
+	 * The main game model. 
+	 */
+	function Game(numRows, numCols) {
+		Game.EVENT_TYPES = {
+			WIN: "ConnectFourModel.Game.WIN",
+			UPDATE: "ConnectFourModel.Game.UPDATE"
+		}
+		
+		this.numRows = numRows;
+		this.numCols = numCols;
+		
+		var 
+			/** The game's state. A 2-dimensional field containing State.{UNSET, RED, YELLOW} */
 			_cellData,
+			
+			/** Array of filters that are used to check whether some player has won */
 			_filters,
+			
+			/** true if it's the red player's turn */
 			_redsTurn,
+			
+			/** true if some player has won */
 			_finished,
-			_moveNr;
+			
+			/** incremented with each move a player conducts */
+			_moveNr,
+			
+			_event_dispatcher;
 			
 		function init() {
-			createGameInfo(containerID);
+			_event_dispatcher = new HSEvent.EventDispatcher();
 			
-			_canvas = createCanvas(containerID);
 			_cellData = initCellData();
 			_filters = createFilters();
 			
-			addEventListeners();
 			_redsTurn = true;
 			_finished = false;
 			_moveNr = 0;
 		}
 		
-		function addEventListeners() {
-			for (var rowNum = 0; rowNum < _canvas.length; rowNum++) {
-				var row = _canvas[rowNum];
-				for (var colNum = 0; colNum < row.length; colNum++) {
-					var col = row[colNum];
-					$(col).bind("click", {rowNum: rowNum, colNum: colNum}, function(event) {
-						onCellClick(event.data.rowNum, event.data.colNum);
-					});
-				}
-			}
+		this.add_event_listener = function add_event_listener(type, handler) {
+			_event_dispatcher.add_event_listener(type, handler);
 		}
-
+		
 		function checkWinSituation() {
 			for (var n = 0; n < _filters.length; n++) {
 				var filter = _filters[n];
 				var cells = filter.check(_cellData);
 				if (cells) {
 					_finished = true;
-					notifyWin(cells);
+					_event_dispatcher.dispatch_event({
+						type: Game.EVENT_TYPES.WIN,
+						winner_cells: cells
+					});
 				}
 			}
 		}
 
-		function createCanvas(containerID) {
-			$("#"+containerID).append('<div id="game_canvas"></div>');
-			
-			var canvas = []
-			
-			for (var rowNum = 0; rowNum < numRows; rowNum++) {
-				var row = [];
-				$("#game_canvas").append('<div class="row clearfix"></div>');
-				var rowNode = $("#game_canvas *:last");
-				
-				for (var colNum = 0; colNum < numCols; colNum++) {
-					rowNode.append('<div class="cell"><div class="inner"></div></div>');
-					var cellNode = $("#game_canvas .row:last .cell:last");
-					row.push(cellNode);
-				}
-				
-				canvas.push(row);
-			}
-			
-			return canvas;
-		}
-		
 		function createFilters() {
 			var horizontal = new WinFilter([
 				[1, 1, 1, 1]
@@ -102,24 +95,16 @@ var ConnectFour = (function($) {
 			return [horizontal, vertical, diagonal1, diagonal2];
 		}
 		
-		function createGameInfo(containerID) {
-			$("#"+containerID).prepend(
-				'<div id="game_info" class="clearfix">' +
-					'<span class="player_info">' +
-						'Player ' +
-						'<span class="player_name red">RED</span> ' +
-						'<div class="win_message hidden">WINS! <button>restart</button></div>' +
-					'</span>' +
-					'<span class="move_info">' +
-						'Move ' +
-						'<span class="move_nr">1</span>' + 
-					'</span>' +
-				'</div>'
-			);
-			
-			$("#"+containerID + " button").click(function() {
-				window.location.reload();
-			});
+		this.get_cell_data = function get_cell_data() {
+			return _cellData;
+		}
+		
+		this.get_event_types = function get_event_types() {
+			return Game.EVENT_TYPES;
+		}
+		
+		this.get_move_nr = function get_move_nr() {
+			return _moveNr;
 		}
 		
 		function initCellData() {
@@ -139,7 +124,11 @@ var ConnectFour = (function($) {
 		 * insert a disc into the specified column.
 		 * @return true if the move was possible (i.e. "something happened"), false else
 		 */
-		function insertDisc(colNum) {
+		this.insertDisc = function insertDisc(colNum) {
+			if (_finished) {
+				return;
+			}
+			
 			var cellValue = _redsTurn ? State.RED : State.YELLOW;
 			for (var rowNum = 0; rowNum < numRows; rowNum++) {
 				if (rowNum < numRows - 1 && _cellData[rowNum + 1][colNum] == State.UNSET) {
@@ -149,26 +138,25 @@ var ConnectFour = (function($) {
 						_cellData[rowNum][colNum] = cellValue;
 						
 						_moveNr++;
+						checkWinSituation();
+						if (!_finished) {
+							_redsTurn = !_redsTurn;
+						}
+						
+						_event_dispatcher.dispatch_event({
+							type: Game.EVENT_TYPES.UPDATE
+						})
 						
 						return true;
 					}
 				}
 			}
+			
 			return false;
 		}
 		
-		function notifyWin(winnerCells) {
-			var winnerIsRed = _cellData[winnerCells[0].row][winnerCells[0].col] == State.RED;
-			updatePlayerNameView(winnerIsRed);
-			$(".win_message").removeClass("hidden");
-			
-			for (var n = 0; n < winnerCells.length; n++) {
-				var cell = winnerCells[n];
-				
-				$(_canvas[cell.row][cell.col])
-					.removeClass("red yellow")
-					.addClass("win");
-			}
+		this.is_reds_turn = function is_reds_turn() {
+			return _redsTurn;
 		}
 		
 		function onCellClick(rowNum, colNum) {
@@ -176,26 +164,7 @@ var ConnectFour = (function($) {
 				var legalMove = insertDisc(colNum);
 				if (legalMove) {
 					_redsTurn = !_redsTurn;
-					updateView();
 					checkWinSituation();
-				}
-			}
-		}
-		
-		function updatePlayerNameView(isRed) {
-			$(".player_name").html(isRed ? "RED" : "YELLOW");
-			$(".player_name").toggleClass("red", isRed);
-			$(".player_name").toggleClass("yellow", !isRed);
-		}
-		
-		function updateView() {
-			updatePlayerNameView(_redsTurn);
-			$(".move_nr").html(_moveNr + 1);
-			
-			for (var rowNum = 0; rowNum < numRows; rowNum++) {
-				for (var colNum = 0; colNum < numCols; colNum++) {
-					var cellClass = ["", "red", "yellow"][_cellData[rowNum][colNum]];
-					$(_canvas[rowNum][colNum]).addClass(cellClass);
 				}
 			}
 		}
@@ -283,4 +252,4 @@ var ConnectFour = (function($) {
 	export.Game = Game;
 	
 	return export;
-})(jQuery);	
+})();	
