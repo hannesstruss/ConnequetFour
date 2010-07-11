@@ -1,18 +1,13 @@
-var sys = require('sys'),
-	http = require('http'),
-	cfmodel = require("./CFourModel");
-
-
-
-
+(function() {
+	var sys = require('sys'),
+		http = require('http'),
+		querystring = require("querystring"),
+		cfmodel = require("./CFourModel"),
+		cfsession = require("./session"),
+		bootstrap = require("./bootstrap");
 	
-http.createServer(function(req, res) {
-	res.writeHead(200, {
-		'Content-Type': 'text/html'
-	});
-	res.write('<br/><strong>    Heasdllo World!</strong>');
-	res.end();
-}).listen(8124);
-				
-sys.puts('Server running at http://127.0.0.1:8124/');
-
+	var session_manager = new cfsession.SessionManager();
+	
+	var bs = new bootstrap.Bootstrap();
+	bs.listen(8124);
+})();
