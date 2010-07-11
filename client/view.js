@@ -1,5 +1,5 @@
 var ConnectFourView = (function ($) {
-	var export = {};
+	var exports = {};
 	
 	function View(container_id, model) {
 		var 
@@ -40,13 +40,13 @@ var ConnectFourView = (function ($) {
 			
 			var canvas = [];
 			
-			for (var rowNum = 0; rowNum < _model.numRows; rowNum++) {
+			for (var rowNum = 0; rowNum < _model.num_rows; rowNum++) {
 				var row = [];
 				// TODO do not use unique id for game_canvas, store reference instead
 				$("#game_canvas").append('<div class="row clearfix"></div>');
 				var rowNode = $("#game_canvas *:last");
 				
-				for (var colNum = 0; colNum < _model.numCols; colNum++) {
+				for (var colNum = 0; colNum < _model.num_cols; colNum++) {
 					rowNode.append('<div class="cell"><div class="inner"></div></div>');
 					var cellNode = $("#game_canvas .row:last .cell:last");
 					row.push(cellNode);
@@ -93,7 +93,7 @@ var ConnectFourView = (function ($) {
 		}
 		
 		function on_cell_click(rowNum, colNum) {
-			_model.insertDisc(colNum);
+			_model.insert_disc(colNum);
 		}
 		
 		function on_win(event) {
@@ -127,7 +127,7 @@ var ConnectFourView = (function ($) {
 		init();
 	}
 	
-	export.View = View;
+	exports.View = View;
 	
-	return export;
+	return exports;
 })(jQuery);

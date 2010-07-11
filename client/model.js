@@ -1,5 +1,5 @@
 var ConnectFourModel = (function() {
-	var export = {};
+	var exports = {};
 	
 	var State = { 
 		UNSET: 0,
@@ -10,52 +10,52 @@ var ConnectFourModel = (function() {
 	/**
 	 * The main game model. 
 	 */
-	function Game(numRows, numCols) {
+	function Game(num_rows, num_cols) {
 		Game.EVENT_TYPES = {
 			WIN: "ConnectFourModel.Game.WIN",
 			UPDATE: "ConnectFourModel.Game.UPDATE"
 		}
 		
-		this.numRows = numRows;
-		this.numCols = numCols;
+		this.num_rows = num_rows;
+		this.num_cols = num_cols;
 		
 		var 
 			/** The game's state. A 2-dimensional field containing State.{UNSET, RED, YELLOW} */
-			_cellData,
+			_cell_data,
 			
 			/** Array of filters that are used to check whether some player has won */
 			_filters,
 			
 			/** true if it's the red player's turn */
-			_redsTurn,
+			_reds_turn,
 			
 			/** true if some player has won */
 			_finished,
 			
 			/** incremented with each move a player conducts */
-			_moveNr,
+			_move_nr,
 			
 			_event_dispatcher;
 			
 		function init() {
 			_event_dispatcher = new HSEvent.EventDispatcher();
 			
-			_cellData = initCellData();
-			_filters = createFilters();
+			_cell_data = init_cell_data();
+			_filters = create_filters();
 			
-			_redsTurn = true;
+			_reds_turn = true;
 			_finished = false;
-			_moveNr = 0;
+			_move_nr = 0;
 		}
 		
 		this.add_event_listener = function add_event_listener(type, handler) {
 			_event_dispatcher.add_event_listener(type, handler);
 		}
 		
-		function checkWinSituation() {
+		function check_win_situation() {
 			for (var n = 0; n < _filters.length; n++) {
 				var filter = _filters[n];
-				var cells = filter.check(_cellData);
+				var cells = filter.check(_cell_data);
 				if (cells) {
 					_finished = true;
 					_event_dispatcher.dispatch_event({
@@ -66,7 +66,7 @@ var ConnectFourModel = (function() {
 			}
 		}
 
-		function createFilters() {
+		function create_filters() {
 			var horizontal = new WinFilter([
 				[1, 1, 1, 1]
 			]);
@@ -96,7 +96,7 @@ var ConnectFourModel = (function() {
 		}
 		
 		this.get_cell_data = function get_cell_data() {
-			return _cellData;
+			return _cell_data;
 		}
 		
 		this.get_event_types = function get_event_types() {
@@ -104,43 +104,44 @@ var ConnectFourModel = (function() {
 		}
 		
 		this.get_move_nr = function get_move_nr() {
-			return _moveNr;
+			return _move_nr;
 		}
 		
-		function initCellData() {
-			var cellData = [];
-			for (var rowNum = 0; rowNum < numRows; rowNum++) {
+		function init_cell_data() {
+			var cell_data = [];
+			for (var row_num = 0; row_num < num_rows; row_num++) {
 				var row = [];
-				for (var colNum = 0; colNum < numCols; colNum++) {
+				for (var col_num = 0; col_num < num_cols; col_num++) {
 					row.push(State.UNSET);
 				}
 				
-				cellData.push(row);
+				cell_data.push(row);
 			}
-			return cellData;
+			return cell_data;
 		}
 		
 		/**
 		 * insert a disc into the specified column.
 		 * @return true if the move was possible (i.e. "something happened"), false else
 		 */
-		this.insertDisc = function insertDisc(colNum) {
+		this.insert_disc = function insert_disc(col_num) {
 			if (_finished) {
 				return;
 			}
 			
-			var cellValue = _redsTurn ? State.RED : State.YELLOW;
-			for (var rowNum = 0; rowNum < numRows; rowNum++) {
-				if (rowNum < numRows - 1 && _cellData[rowNum + 1][colNum] == State.UNSET) {
+			var cell_value = _reds_turn ? State.RED : State.YELLOW;
+			
+			for (var row_num = 0; row_num < num_rows; row_num++) {
+				if (row_num < num_rows - 1 && _cell_data[row_num + 1][col_num] == State.UNSET) {
 					continue;
 				} else {
-					if (_cellData[rowNum][colNum] == State.UNSET) {
-						_cellData[rowNum][colNum] = cellValue;
+					if (_cell_data[row_num][col_num] == State.UNSET) {
+						_cell_data[row_num][col_num] = cell_value;
 						
-						_moveNr++;
-						checkWinSituation();
+						_move_nr++;
+						check_win_situation();
 						if (!_finished) {
-							_redsTurn = !_redsTurn;
+							_reds_turn = !_reds_turn;
 						}
 						
 						_event_dispatcher.dispatch_event({
@@ -156,31 +157,21 @@ var ConnectFourModel = (function() {
 		}
 		
 		this.is_reds_turn = function is_reds_turn() {
-			return _redsTurn;
-		}
-		
-		function onCellClick(rowNum, colNum) {
-			if (!_finished) {
-				var legalMove = insertDisc(colNum);
-				if (legalMove) {
-					_redsTurn = !_redsTurn;
-					checkWinSituation();
-				}
-			}
+			return _reds_turn;
 		}
 		
 		init();
 	}
 	
-	function WinFilter(filterMatrix) {
+	function WinFilter(filter_matrix) {
 		var _width,
 			_height,
 			_cells;
 		
 		function init() {
-			_width = filterMatrix[0].length;
-			_height = filterMatrix.length;
-			_cells = initCells(filterMatrix);
+			_width = filter_matrix[0].length;
+			_height = filter_matrix.length;
+			_cells = init_cells(filter_matrix);
 		}
 		
 		/**
@@ -227,7 +218,7 @@ var ConnectFourModel = (function() {
 			return null;
 		}
 		
-		function initCells(matrix) {
+		function init_cells(matrix) {
 			var cells = [];
 			
 			for (var rowNum = 0; rowNum < matrix.length; rowNum++) {
@@ -249,7 +240,7 @@ var ConnectFourModel = (function() {
 		init(); 
 	}
 	
-	export.Game = Game;
+	exports.Game = Game;
 	
-	return export;
+	return exports;
 })();	
