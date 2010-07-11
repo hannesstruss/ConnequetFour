@@ -21,7 +21,7 @@ var ConnectFourModel = (function() {
 		
 		var 
 			/** The game's state. A 2-dimensional field containing State.{UNSET, RED, YELLOW} */
-			_cellData,
+			_cell_data,
 			
 			/** Array of filters that are used to check whether some player has won */
 			_filters,
@@ -40,7 +40,7 @@ var ConnectFourModel = (function() {
 		function init() {
 			_event_dispatcher = new HSEvent.EventDispatcher();
 			
-			_cellData = init_cell_data();
+			_cell_data = init_cell_data();
 			_filters = create_filters();
 			
 			_reds_turn = true;
@@ -55,7 +55,7 @@ var ConnectFourModel = (function() {
 		function check_win_situation() {
 			for (var n = 0; n < _filters.length; n++) {
 				var filter = _filters[n];
-				var cells = filter.check(_cellData);
+				var cells = filter.check(_cell_data);
 				if (cells) {
 					_finished = true;
 					_event_dispatcher.dispatch_event({
@@ -96,7 +96,7 @@ var ConnectFourModel = (function() {
 		}
 		
 		this.get_cell_data = function get_cell_data() {
-			return _cellData;
+			return _cell_data;
 		}
 		
 		this.get_event_types = function get_event_types() {
@@ -108,16 +108,16 @@ var ConnectFourModel = (function() {
 		}
 		
 		function init_cell_data() {
-			var cellData = [];
+			var cell_data = [];
 			for (var rowNum = 0; rowNum < num_rows; rowNum++) {
 				var row = [];
 				for (var colNum = 0; colNum < num_cols; colNum++) {
 					row.push(State.UNSET);
 				}
 				
-				cellData.push(row);
+				cell_data.push(row);
 			}
-			return cellData;
+			return cell_data;
 		}
 		
 		/**
@@ -130,12 +130,13 @@ var ConnectFourModel = (function() {
 			}
 			
 			var cellValue = _reds_turn ? State.RED : State.YELLOW;
+			
 			for (var rowNum = 0; rowNum < num_rows; rowNum++) {
-				if (rowNum < num_rows - 1 && _cellData[rowNum + 1][colNum] == State.UNSET) {
+				if (rowNum < num_rows - 1 && _cell_data[rowNum + 1][colNum] == State.UNSET) {
 					continue;
 				} else {
-					if (_cellData[rowNum][colNum] == State.UNSET) {
-						_cellData[rowNum][colNum] = cellValue;
+					if (_cell_data[rowNum][colNum] == State.UNSET) {
+						_cell_data[rowNum][colNum] = cellValue;
 						
 						_moveNr++;
 						check_win_situation();
