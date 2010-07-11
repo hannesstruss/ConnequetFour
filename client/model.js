@@ -109,9 +109,9 @@ var ConnectFourModel = (function() {
 		
 		function init_cell_data() {
 			var cell_data = [];
-			for (var rowNum = 0; rowNum < num_rows; rowNum++) {
+			for (var row_num = 0; row_num < num_rows; row_num++) {
 				var row = [];
-				for (var colNum = 0; colNum < num_cols; colNum++) {
+				for (var col_num = 0; col_num < num_cols; col_num++) {
 					row.push(State.UNSET);
 				}
 				
