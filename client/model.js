@@ -124,19 +124,19 @@ var ConnectFourModel = (function() {
 		 * insert a disc into the specified column.
 		 * @return true if the move was possible (i.e. "something happened"), false else
 		 */
-		this.insert_disc = function insert_disc(colNum) {
+		this.insert_disc = function insert_disc(col_num) {
 			if (_finished) {
 				return;
 			}
 			
 			var cell_value = _reds_turn ? State.RED : State.YELLOW;
 			
-			for (var rowNum = 0; rowNum < num_rows; rowNum++) {
-				if (rowNum < num_rows - 1 && _cell_data[rowNum + 1][colNum] == State.UNSET) {
+			for (var row_num = 0; row_num < num_rows; row_num++) {
+				if (row_num < num_rows - 1 && _cell_data[row_num + 1][col_num] == State.UNSET) {
 					continue;
 				} else {
-					if (_cell_data[rowNum][colNum] == State.UNSET) {
-						_cell_data[rowNum][colNum] = cell_value;
+					if (_cell_data[row_num][col_num] == State.UNSET) {
+						_cell_data[row_num][col_num] = cell_value;
 						
 						_move_nr++;
 						check_win_situation();
