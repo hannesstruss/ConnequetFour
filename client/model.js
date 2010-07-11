@@ -40,8 +40,8 @@ var ConnectFourModel = (function() {
 		function init() {
 			_event_dispatcher = new HSEvent.EventDispatcher();
 			
-			_cellData = initCellData();
-			_filters = createFilters();
+			_cellData = init_cell_data();
+			_filters = create_filters();
 			
 			_redsTurn = true;
 			_finished = false;
@@ -52,7 +52,7 @@ var ConnectFourModel = (function() {
 			_event_dispatcher.add_event_listener(type, handler);
 		}
 		
-		function checkWinSituation() {
+		function check_win_situation() {
 			for (var n = 0; n < _filters.length; n++) {
 				var filter = _filters[n];
 				var cells = filter.check(_cellData);
@@ -66,7 +66,7 @@ var ConnectFourModel = (function() {
 			}
 		}
 
-		function createFilters() {
+		function create_filters() {
 			var horizontal = new WinFilter([
 				[1, 1, 1, 1]
 			]);
@@ -107,7 +107,7 @@ var ConnectFourModel = (function() {
 			return _moveNr;
 		}
 		
-		function initCellData() {
+		function init_cell_data() {
 			var cellData = [];
 			for (var rowNum = 0; rowNum < num_rows; rowNum++) {
 				var row = [];
@@ -138,7 +138,7 @@ var ConnectFourModel = (function() {
 						_cellData[rowNum][colNum] = cellValue;
 						
 						_moveNr++;
-						checkWinSituation();
+						check_win_situation();
 						if (!_finished) {
 							_redsTurn = !_redsTurn;
 						}
