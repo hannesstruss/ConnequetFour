@@ -129,7 +129,7 @@ var ConnectFourModel = (function() {
 				return;
 			}
 			
-			var cellValue = _reds_turn ? State.RED : State.YELLOW;
+			var cell_value = _reds_turn ? State.RED : State.YELLOW;
 			
 			for (var rowNum = 0; rowNum < num_rows; rowNum++) {
 				if (rowNum < num_rows - 1 && _cell_data[rowNum + 1][colNum] == State.UNSET) {
