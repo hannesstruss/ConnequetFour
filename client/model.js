@@ -159,16 +159,6 @@ var ConnectFourModel = (function() {
 			return _redsTurn;
 		}
 		
-		function onCellClick(rowNum, colNum) {
-			if (!_finished) {
-				var legalMove = insertDisc(colNum);
-				if (legalMove) {
-					_redsTurn = !_redsTurn;
-					checkWinSituation();
-				}
-			}
-		}
-		
 		init();
 	}
 	
