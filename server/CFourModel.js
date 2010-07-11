@@ -1,5 +1,5 @@
 var ConnectFourModel = (function() {
-	var exports = {};
+	var my = {};
 	
 	var State = { 
 		UNSET: 0,
@@ -240,7 +240,7 @@ var ConnectFourModel = (function() {
 		init(); 
 	}
 	
-	exports.Game = Game;
+	my.Game = Game;
 	
-	return exports;
+	return my;
 })();	
