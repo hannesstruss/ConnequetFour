@@ -21,14 +21,15 @@
 		$("#b").bind("click", function() {
 			$.post("/cfour_be/register_session", function(data) {
 				$("#output").html(data["session_id"]);
-				console.log(data);
+				
+				(function poll() {
+					$.get("/cfour_be/poll", {
+						session_id: data["session_id"]
+					}, function(data) {
+						poll();
+					});
+				})();
 			});
-			(function poll() {
-				$.get("/cfour_be/poll", function(data) {
-					console.log(data);
-					poll();
-				});
-			})();
 		});
 		
 	})(jQuery);
