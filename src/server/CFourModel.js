@@ -210,9 +210,9 @@ var ConnectFourModel = (function() {
 							_reds_turn = !_reds_turn;
 						}
 						
-						_event_dispatcher.dispatch_event({
-							type: Game.EVENT_TYPES.UPDATE
-						});
+						//_event_dispatcher.dispatch_event({
+						//	type: Game.EVENT_TYPES.UPDATE
+						//});
 						
 						return true;
 					}

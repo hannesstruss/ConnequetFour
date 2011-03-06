@@ -43,9 +43,7 @@ var
 			num_cols = 7;
 		
 		self.insert_disc = function(colnum) {
-			setTimeout(function() {
-				$(self).trigger("cf:update");
-			}, 1000);
+			$.post(backend_url + "insert_disc?col=" + colnum);
 		};
 		
 		self.get_move_nr = function() {
