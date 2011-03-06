@@ -7,9 +7,9 @@ var sys = require('sys'),
 	
 (function() {
 	
-	var session_manager = new cfsession.SessionManager();
-	
-	var server = new server.Server();
+	var 
+		session_manager = new cfsession.SessionManager(),
+		server = new server.Server();
 	
 	server.post("/register_session", function(req, res) {
 		var client = new cfsession.Client();
