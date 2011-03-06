@@ -1,21 +1,16 @@
-var http = require("http"),
+var 
+	exports = exports || {},
+	http = require("http"),
 	sys = require("sys"),
 	url = require("url");
 
 
-function Bootstrap() {
+function Server() {
 	var
 		_post_map,
 		_get_map,
 		_server;
 		
-	function init() {
-		_post_map = {};
-		_get_map = {};
-		
-		_server = http.createServer(handle_request);
-	}
-	
 	function fail_404(res) {
 		res.writeHead(404, {
 			'Content-type': 'text/plain'
@@ -51,23 +46,29 @@ function Bootstrap() {
 	this.listen = function listen(port, host) {
 		_server.listen(port, host);
 		sys.puts("Server at http://" + (host || "127.0.0.1") + ":" + port.toString() + "/");
-	}
+	};
 	
 	this.ok = function ok(res, content_type) {
 		res.writeHead(200, {
 			'Content-type': content_type || "application/json"
 		});
-	}
+	};
 	
 	this.post = function post(path, handler) {
 		_post_map[path] = handler;
-	}
+	};
 	
 	this.get = function get(path, handler) {
 		_get_map[path] = handler;
-	}
+	};
 	
+	function init() {
+		_post_map = {};
+		_get_map = {};
+		
+		_server = http.createServer(handle_request);
+	}
 	init();
 }
 
-exports.Bootstrap = Bootstrap;
+exports.Server = Server;

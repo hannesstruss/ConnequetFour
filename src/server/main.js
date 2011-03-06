@@ -3,13 +3,13 @@ var sys = require('sys'),
 	url = require("url"),
 	cfmodel = require("./CFourModel"),
 	cfsession = require("./session"),
-	bootstrap = require("./bootstrap");
+	server = require("./server");
 	
 (function() {
 	
 	var session_manager = new cfsession.SessionManager();
 	
-	var bs = new bootstrap.Bootstrap();
+	var bs = new server.Server();
 	
 	bs.post("/register_session", function(req, res) {
 		var client = new cfsession.Client();
