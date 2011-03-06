@@ -4,7 +4,34 @@ var
 	
 (function($) {
 	
-	function Connector(backend_url) {
+	function CometListener(url) {
+		var 
+			self = this,
+			callback;
+		
+		function request() {
+			$.get(url, on_result);
+		}
+		
+		function on_result(data) {
+			request();
+			callback(data);
+		}
+		
+		self.start = function() {
+			request();
+		};
+		
+		self.stop = function() {
+			// TODO implement
+		};
+		
+		self.set_callback = function(f) {
+			callback = f;
+		};
+	}
+	
+	function Connector(backend_url, event_dispatcher) {
 		var 
 			self = this,
 			STATES = { 
@@ -38,12 +65,21 @@ var
 		
 		self.is_reds_turn = function() {
 			return true;
-		}
+		};
 		
 		self.__defineGetter__("num_cols", function() { return num_cols; });
 		self.__defineGetter__("num_rows", function() { return num_rows; });
+		
+		function init() {
+			event_dispatcher.set_callback(function(data) {
+				console.log(data);
+			});
+			event_dispatcher.start();
+		}
+		init();
 	}
 	
 	ConnectFour.Connector = Connector;
+	ConnectFour.CometListener = CometListener;
 	
 })(jQuery);
