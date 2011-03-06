@@ -9,9 +9,9 @@ var sys = require('sys'),
 	
 	var session_manager = new cfsession.SessionManager();
 	
-	var bs = new server.Server();
+	var server = new server.Server();
 	
-	bs.post("/register_session", function(req, res) {
+	server.post("/register_session", function(req, res) {
 		var client = new cfsession.Client();
 		session_manager.register_client(client);
 		
@@ -19,11 +19,11 @@ var sys = require('sys'),
 			session_id: client.get_session_id()
 		};
 		
-		bs.ok(res);
+		server.ok(res);
 		res.end(JSON.stringify(result));
 	});
 	
-	bs.get("/poll", function(req, res) {
+	server.get("/poll", function(req, res) {
 		var qp = url.parse(req.url, true).query;
 		console.log(JSON.stringify(qp));
 		
@@ -35,5 +35,5 @@ var sys = require('sys'),
 		}, 20000);
 	});
 	
-	bs.listen(8124);
+	server.listen(8124);
 })();
