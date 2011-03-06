@@ -123,6 +123,10 @@ var
 			//_model.add_event_listener(_model.get_event_types().WIN, on_win);
 			//_model.add_event_listener(_model.get_event_types().UPDATE, on_update);
 			
+			console.log(_model);
+			
+			$(_model).bind("cf:win", on_win);
+			$(_model).bind("cf:update", on_update);
 			
 			create_game_info(container_id);
 			_canvas = create_canvas(container_id);
