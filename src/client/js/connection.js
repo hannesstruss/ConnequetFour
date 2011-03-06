@@ -11,7 +11,9 @@ var
 				UNSET: 0,
 				RED: 1,
 				YELLOW: 2
-			};
+			},
+			num_rows = 6,
+			num_cols = 7;
 		
 		self.insert_disc = function(colnum) {
 			setTimeout(function() {
@@ -38,8 +40,8 @@ var
 			return true;
 		}
 		
-		self.num_rows = 6;
-		self.num_cols = 7;
+		self.__defineGetter__("num_cols", function() { return num_cols; });
+		self.__defineGetter__("num_rows", function() { return num_rows; });
 	}
 	
 	ConnectFour.Connector = Connector;
