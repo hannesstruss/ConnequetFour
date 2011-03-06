@@ -28,7 +28,7 @@ var sys = require('sys'),
 		console.log(JSON.stringify(qp));
 		
 		setTimeout(function() {
-			bs.ok(res);
+			server.ok(res);
 			res.end(JSON.stringify({
 				op: "nop"
 			}));
