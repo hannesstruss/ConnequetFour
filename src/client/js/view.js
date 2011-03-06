@@ -118,16 +118,19 @@ var
 			update_view();
 		}
 		
+		function on_ready() {
+			create_game_info(container_id);
+			_canvas = create_canvas(container_id);
+			
+			add_cell_event_listeners();
+		}
+		
 		function init() {
 			_model = model;
 			
 			$(_model).bind("cf:win", on_win);
 			$(_model).bind("cf:update", on_update);
-			
-			create_game_info(container_id);
-			_canvas = create_canvas(container_id);
-			
-			add_cell_event_listeners();
+			$(_model).bind("cf:ready", on_ready);
 		}
 		init();
 	}

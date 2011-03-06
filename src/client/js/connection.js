@@ -71,10 +71,13 @@ var
 		self.__defineGetter__("num_rows", function() { return num_rows; });
 		
 		function init() {
-			event_dispatcher.set_callback(function(data) {
-				console.log(data);
-			});
-			event_dispatcher.start();
+			setTimeout(function() {
+				event_dispatcher.set_callback(function(data) {
+					console.log(data);
+				});
+				event_dispatcher.start();
+				$(self).trigger("cf:ready");
+			}, 1000);
 		}
 		init();
 	}
