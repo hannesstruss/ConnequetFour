@@ -6,10 +6,6 @@
 		var
 			_session_id;
 		
-		function init() {
-			_session_id = generate_session_id();
-		}
-		
 		function generate_session_id() {
 			var hash = crypto.createHash("sha1");
 			hash.update(Math.random());
@@ -19,6 +15,10 @@
 		
 		this.get_session_id = function get_session_id() {
 			return _session_id;
+		};
+		
+		function init() {
+			_session_id = generate_session_id();
 		}
 		
 		init();
@@ -34,7 +34,7 @@
 		
 		this.register_client = function register_client(client) {
 			_clients[client.get_session_id()] = client;
-		}
+		};
 		
 		init();
 	}

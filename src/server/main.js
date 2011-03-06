@@ -25,7 +25,6 @@ var sys = require('sys'),
 	
 	server.get("/poll", function(req, res) {
 		var qp = url.parse(req.url, true).query;
-		console.log(JSON.stringify(qp));
 		
 		setTimeout(function() {
 			server.ok(res);

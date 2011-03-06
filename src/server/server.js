@@ -1,9 +1,7 @@
 var 
-	exports = exports || {},
 	http = require("http"),
 	sys = require("sys"),
 	url = require("url");
-
 
 function Server() {
 	var
