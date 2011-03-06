@@ -1,6 +1,8 @@
-var ConnectFourView = (function ($) {
-	var exports = {};
-	
+var 
+	ConnectFour = ConnectFour || {},
+	jQuery = jQuery || function() {};
+
+(function ($) {
 	function View(container_id, model) {
 		var 
 			/** The game model */
@@ -12,25 +14,21 @@ var ConnectFourView = (function ($) {
 			 */
 			_canvas;
 		
-		function init() {
-			_model = model;
-			_model.add_event_listener(_model.get_event_types().WIN, on_win);
-			_model.add_event_listener(_model.get_event_types().UPDATE, on_update);
-			
-			create_game_info(container_id);
-			_canvas = create_canvas(container_id);
-			
-			add_cell_event_listeners();
+		
+		function on_cell_click(rowNum, colNum) {
+			_model.insert_disc(colNum);
 		}
 		
 		function add_cell_event_listeners() {
+			var click_handler = function(event) {
+				on_cell_click(event.data.rowNum, event.data.colNum);
+			};
+			
 			for (var rowNum = 0; rowNum < _canvas.length; rowNum++) {
 				var row = _canvas[rowNum];
 				for (var colNum = 0; colNum < row.length; colNum++) {
 					var col = row[colNum];
-					$(col).bind("click", {rowNum: rowNum, colNum: colNum}, function(event) {
-						on_cell_click(event.data.rowNum, event.data.colNum);
-					});
+					$(col).bind("click", {rowNum: rowNum, colNum: colNum}, click_handler);
 				}
 			}
 		}
@@ -92,18 +90,6 @@ var ConnectFourView = (function ($) {
 			}
 		}
 		
-		function on_cell_click(rowNum, colNum) {
-			_model.insert_disc(colNum);
-		}
-		
-		function on_win(event) {
-			display_win(event.winner_cells);
-		}
-		
-		function on_update(event) {
-			update_view();
-		}
-		
 		function update_player_name_view(isRed) {
 			// TODO don't use classnames, store references instead
 			$(".player_name").html(isRed ? "RED" : "YELLOW");
@@ -124,10 +110,27 @@ var ConnectFourView = (function ($) {
 			}
 		}
 		
+		function on_win(event) {
+			display_win(event.winner_cells);
+		}
+		
+		function on_update(event) {
+			update_view();
+		}
+		
+		function init() {
+			_model = model;
+			//_model.add_event_listener(_model.get_event_types().WIN, on_win);
+			//_model.add_event_listener(_model.get_event_types().UPDATE, on_update);
+			
+			
+			create_game_info(container_id);
+			_canvas = create_canvas(container_id);
+			
+			add_cell_event_listeners();
+		}
 		init();
 	}
 	
-	exports.View = View;
-	
-	return exports;
+	ConnectFour.View = View;
 })(jQuery);
