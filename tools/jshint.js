@@ -771,7 +771,9 @@ var JSHINT = (function () {
             global      : false,
             module      : false,
             process     : false,
-            require     : false
+            require     : false,
+			exports		: false,
+			setTimeout	: false
         },
 
         noreach,
