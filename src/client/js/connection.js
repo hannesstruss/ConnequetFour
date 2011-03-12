@@ -91,11 +91,14 @@
 		self.__defineGetter__("num_cols", function() { return num_cols; });
 		self.__defineGetter__("num_rows", function() { return num_rows; });
 		
+		self.start = function() {
+			event_dispatcher.start();
+		};
+		
 		function init() {
 			event_dispatcher.set_callback(function(data) {
 				//console.log(data);
 			});
-			event_dispatcher.start();
 			$(self).trigger("cf:ready");
 		}
 		init();
@@ -112,6 +115,8 @@
 		function on_game_data_received(data) {
 			connector = connector_factory.get_connector(
 				data.session_id, data.num_rows, data.num_cols);
+			connector.start();
+			$(self).trigger("cf:new_game_started");
 		}
 		
 		function load_game_data() {

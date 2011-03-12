@@ -23,7 +23,7 @@
 		
 		init();
 	}
-	
+	// TODO: purge sessions after x inactive minutes
 	function SessionManager() {
 		var 
 			_clients;

@@ -3,6 +3,7 @@
 (function ($) {
 	function View(container_id, model) {
 		var 
+			self = this,
 			/** The game model */
 			_model,
 			
@@ -116,7 +117,7 @@
 			update_view();
 		}
 		
-		function on_ready() {
+		self.start = function() {
 			create_game_info(container_id);
 			_canvas = create_canvas(container_id);
 			
@@ -128,7 +129,6 @@
 			
 			$(_model).bind("cf:win", on_win);
 			$(_model).bind("cf:update", on_update);
-			$(_model).bind("cf:ready", on_ready);
 		}
 		init();
 	}

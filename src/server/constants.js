@@ -1,6 +1,6 @@
 /*global exports: false */
 
 exports.CONSTANTS = {
-	num_rows: 7,
-	num_cols: 6
+	num_rows: 6,
+	num_cols: 7
 };

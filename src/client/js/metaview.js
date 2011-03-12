@@ -2,14 +2,15 @@
 	
 (function($) {
 	
-	function MetaView(container, game_manager) {
+	function MetaView(container, game_manager, view_factory) {
 		
 		function new_game() {
 			game_manager.start_new_game();
 		}
 		
 		function on_new_game_started() {
-			
+			var view = view_factory.get_view(game_manager.get_connector());
+			view.start();
 		}
 		
 		function init() {
