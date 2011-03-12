@@ -3,15 +3,17 @@ var sys = require('sys'),
 	url = require("url"),
 	cfmodel = require("./CFourModel"),
 	cfsession = require("./session"),
-	cfserver = require("./server")
-	constants = require("./constants").CONSTANTS;
+	cfserver = require("./server"),
+	constants = require("./constants").CONSTANTS,
+	CometQueue = require("./cometqueue").CometQueue;
 	
 (function() {
 	
 	var 
 		session_manager = new cfsession.SessionManager(),
 		server = new cfserver.Server(),
-		model = new cfmodel.Game(6, 7);
+		model = new cfmodel.Game(6, 7),
+		comet_queue = new CometQueue();
 	
 	server.post("/init_game", function(req, res) {
 		var client = new cfsession.Client();
@@ -35,18 +37,19 @@ var sys = require('sys'),
 			model.insert_disc(col);
 			server.ok(res);
 			res.end();
+			comet_queue.send("0", JSON.stringify({
+				op: "game_update",
+				cell_data: model.get_cell_data(),
+				is_reds_turn: model.is_reds_turn()
+			}));
 		}
+		
 	});
 	
 	server.get("/poll", function(req, res) {
 		var qp = url.parse(req.url, true).query;
 		
-		setTimeout(function() {
-			server.ok(res);
-			res.end(JSON.stringify({
-				op: "nop"
-			}));
-		}, 20000);
+		comet_queue.add("0", res);
 	});
 	
 	server.listen(8124);

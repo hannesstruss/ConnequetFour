@@ -59,7 +59,8 @@
 				UNSET: 0,
 				RED: 1,
 				YELLOW: 2
-			};
+			},
+			cell_data = [[]];
 		
 		self.insert_disc = function(colnum) {
 			$.post(backend_url + "insert_disc?col=" + colnum);
@@ -70,14 +71,7 @@
 		};
 		
 		self.get_cell_data = function() {
-			return [
-				[STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET],
-				[STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET],
-				[STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET],
-				[STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET],
-				[STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET],
-				[STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.UNSET, STATES.RED]
-			];
+			return cell_data;
 		};
 		
 		self.is_reds_turn = function() {
@@ -95,10 +89,23 @@
 			event_dispatcher.start();
 		};
 		
+		function trigger_update() {
+			$(self).trigger("cf:update");
+		}
+		
+		function on_comet_event(data) {
+			switch (data.op) {
+				case "nop":
+					break;
+				case "game_update":
+					cell_data = data.cell_data;
+					trigger_update();
+					break;
+			}
+		}
+		
 		function init() {
-			event_dispatcher.set_callback(function(data) {
-				//console.log(data);
-			});
+			event_dispatcher.set_callback(on_comet_event);
 			$(self).trigger("cf:ready");
 		}
 		init();
@@ -133,7 +140,7 @@
 		
 		self.get_connector = function() {
 			return connector;
-		}
+		};
 		
 	}
 	
