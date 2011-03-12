@@ -1,7 +1,7 @@
 /*global ConnectFour: false, jQuery: false */
 
 (function ($) {
-	function View(container_id, model) {
+	function View(container, model) {
 		var 
 			self = this,
 			/** The game model */
@@ -33,7 +33,7 @@
 		}
 		
 		function create_canvas(container_id) {
-			$("#"+container_id).append('<div id="game_canvas"></div>');
+			$(container).append('<div id="game_canvas"></div>');
 			
 			var canvas = [];
 			
@@ -56,7 +56,7 @@
 		}
 		
 		function create_game_info(container_id) {
-			$("#"+container_id).prepend(
+			$(container).prepend(
 				'<div id="game_info" class="clearfix">' +
 					'<span class="player_info">' +
 						'Player ' +
@@ -70,7 +70,7 @@
 				'</div>'
 			);
 			
-			$("#"+container_id + " button").click(function() {
+			$(container).find("button").click(function() {
 				window.location.reload();
 			});
 		}
@@ -118,11 +118,11 @@
 		}
 		
 		self.start = function() {
-			create_game_info(container_id);
-			_canvas = create_canvas(container_id);
+			create_game_info(container);
+			_canvas = create_canvas(container);
 			
 			add_cell_event_listeners();
-		}
+		};
 		
 		function init() {
 			_model = model;

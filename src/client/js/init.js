@@ -12,7 +12,7 @@
 		
 		view_factory = {
 			get_view: function(connector) {
-				return new ConnectFour.View("game_container", connector);
+				return new ConnectFour.View($("#game_container"), connector);
 			}
 		},
 	
