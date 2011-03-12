@@ -7,11 +7,16 @@
 </head> 
 <body> 
 
+<div id="meta_view">
+	<button class="new_game">New Game</button>
+</div>
 <div id="game_container"></div>
 
 <script type="text/javascript" src="js/lib/jquery-1.5.1.js"></script>
 <script type="text/javascript">
 	jQuery.noConflict();
+	var ConnectFour = ConnectFour || {};
+	ConnectFour.jQuery = jQuery;
 </script>
 <script type="text/javascript" src="js/view.js"></script>
 <script type="text/javascript" src="js/connection.js"></script>

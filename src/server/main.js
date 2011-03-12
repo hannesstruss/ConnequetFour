@@ -30,7 +30,6 @@ var sys = require('sys'),
 		var col = parseInt(qp.col, 10);
 		if (!isNaN(col)) {
 			model.insert_disc(col);
-			console.log(col);
 			server.ok(res);
 			res.end();
 		}

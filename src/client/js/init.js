@@ -1,6 +1,4 @@
-var 
-	ConnectFour = ConnectFour || {},
-	jQuery = jQuery || function() {};
+/*global ConnectFour: false, jQuery: false */
 
 jQuery(function($) {
 	
