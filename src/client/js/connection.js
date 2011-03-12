@@ -92,14 +92,11 @@
 		self.__defineGetter__("num_rows", function() { return num_rows; });
 		
 		function init() {
-			// TODO: remove timeout, it's only there to mock network latency
-			setTimeout(function() {
-				event_dispatcher.set_callback(function(data) {
-					//console.log(data);
-				});
-				event_dispatcher.start();
-				$(self).trigger("cf:ready");
-			}, 1000);
+			event_dispatcher.set_callback(function(data) {
+				//console.log(data);
+			});
+			event_dispatcher.start();
+			$(self).trigger("cf:ready");
 		}
 		init();
 	}
