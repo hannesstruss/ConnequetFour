@@ -6,23 +6,31 @@
 		var 
 			self = this,
 			callback,
-			on_result;
+			on_result,
+			started = false,
+			xhr;
 		
 		function request() {
-			$.get(url, on_result);
+			xhr = $.get(url, on_result);
 		}
 		
 		on_result = function(data) {
-			request();
-			callback(data);
+			if (started) {
+				request();
+				callback(data);
+			}
 		};
 		
 		self.start = function() {
+			started = true;
 			request();
 		};
 		
 		self.stop = function() {
-			// TODO implement
+			started = false;
+			if (xhr) {
+				xhr.abort();
+			}
 		};
 		
 		self.set_callback = function(f) {
