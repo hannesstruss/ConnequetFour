@@ -3,7 +3,8 @@ var sys = require('sys'),
 	url = require("url"),
 	cfmodel = require("./CFourModel"),
 	cfsession = require("./session"),
-	cfserver = require("./server");
+	cfserver = require("./server")
+	constants = require("./constants").CONSTANTS;
 	
 (function() {
 	
@@ -12,12 +13,14 @@ var sys = require('sys'),
 		server = new cfserver.Server(),
 		model = new cfmodel.Game(6, 7);
 	
-	server.post("/register_session", function(req, res) {
+	server.post("/init_game", function(req, res) {
 		var client = new cfsession.Client();
 		session_manager.register_client(client);
 		
 		var result = {
-			session_id: client.get_session_id()
+			session_id: client.get_session_id(),
+			num_rows: constants.num_rows,
+			num_cols: constants.num_cols
 		};
 		
 		server.ok(res);

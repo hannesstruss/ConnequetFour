@@ -2,10 +2,10 @@
 	
 (function($) {
 	
-	function MetaView(container) {
+	function MetaView(container, game_manager) {
 		
 		function new_game() {
-			
+			game_manager.start_new_game();
 		}
 		
 		function init() {
