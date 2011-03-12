@@ -52,7 +52,7 @@
 	/**
 	 * Connects to the backend
 	 */
-	function Connector(backend_url, event_dispatcher) {
+	function Connector(session_id, backend_url, event_dispatcher) {
 		var 
 			self = this,
 			STATES = { 
@@ -86,12 +86,6 @@
 			return true;
 		};
 		
-		self.init_game = function() {
-			$.post(backend_url + "init_game", function(data) {
-				$(self).trigger("cf:init_game", data);
-			});
-		};
-		
 		self.shutdown = function() {
 			event_dispatcher.kill();
 		};
@@ -116,14 +110,17 @@
 	 * Handles the creation of a new game, session data etc.
 	 * @param {Object} connector_factory
 	 */
-	function GameManager(connector_factory) {
+	function GameManager(init_url, connector_factory) {
 		var
 			self = this,
 			connector;
-			
-		function on_init_game(event, game_data) {
-			console.log(game_data);
-			connector.shutdown();
+		
+		function on_game_data_received(data) {
+			connector = connector_factory.get_connector(data.session_id);
+		}
+		
+		function load_game_data() {
+			$.post(init_url, on_game_data_received);
 		}
 		
 		self.start_new_game = function() {
@@ -131,10 +128,12 @@
 			if (connector) {
 				connector.shutdown();
 			}
-			connector = connector_factory.get_connector();
-			$(connector).bind("cf:init_game", on_init_game);
-			connector.init_game();
+			load_game_data();
 		};
+		
+		self.get_connector = function() {
+			return connector;
+		}
 		
 	}
 	
