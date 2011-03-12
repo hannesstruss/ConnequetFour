@@ -7,16 +7,17 @@ var
 	function CometListener(url) {
 		var 
 			self = this,
-			callback;
+			callback,
+			on_result;
 		
 		function request() {
 			$.get(url, on_result);
 		}
 		
-		function on_result(data) {
+		on_result = function(data) {
 			request();
 			callback(data);
-		}
+		};
 		
 		self.start = function() {
 			request();
