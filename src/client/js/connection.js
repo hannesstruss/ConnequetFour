@@ -52,16 +52,14 @@
 	/**
 	 * Connects to the backend
 	 */
-	function Connector(session_id, backend_url, event_dispatcher) {
+	function Connector(session_id, backend_url, event_dispatcher, num_rows, num_cols) {
 		var 
 			self = this,
 			STATES = { 
 				UNSET: 0,
 				RED: 1,
 				YELLOW: 2
-			},
-			num_rows = 6,
-			num_cols = 7;
+			};
 		
 		self.insert_disc = function(colnum) {
 			$.post(backend_url + "insert_disc?col=" + colnum);
@@ -108,7 +106,6 @@
 	
 	/** 
 	 * Handles the creation of a new game, session data etc.
-	 * @param {Object} connector_factory
 	 */
 	function GameManager(init_url, connector_factory) {
 		var
@@ -116,7 +113,8 @@
 			connector;
 		
 		function on_game_data_received(data) {
-			connector = connector_factory.get_connector(data.session_id);
+			connector = connector_factory.get_connector(
+				data.session_id, data.num_rows, data.num_cols);
 		}
 		
 		function load_game_data() {

@@ -4,9 +4,9 @@
 	
 	var 
 		connector_factory = {
-			get_connector: function(session_id) {
+			get_connector: function(session_id, num_rows, num_cols) {
 				return new ConnectFour.Connector(session_id, "/cfour_be/", 
-					new ConnectFour.CometListener("/cfour_be/poll"));
+					new ConnectFour.CometListener("/cfour_be/poll"), num_rows, num_cols);
 			}
 		},
 		
