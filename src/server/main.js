@@ -17,7 +17,8 @@ var sys = require('sys'),
 		comet_queue = new CometQueue();
 		
 	server.add_middleware(new helper.QueryParamMiddleware());
-	server.add_middleware(new cfsession.SessionMiddleware(session_manager));
+	server.add_middleware(new cfsession.SessionMiddleware(session_manager,
+		new cfsession.ClientFactory()));
 	
 	server.post("/init_game", function(req, res) {
 		var result = {
@@ -45,9 +46,7 @@ var sys = require('sys'),
 	});
 	
 	server.get("/poll", function(req, res) {
-		var qp = url.parse(req.url, true).query;
-		
-		comet_queue.add("0", res);
+		comet_queue.add(req.client.session_id, res);
 	});
 	
 	server.listen(8124);

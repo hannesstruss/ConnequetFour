@@ -21,6 +21,7 @@
 		}
 		
 		on_result = function(data) {
+			console.log(data);
 			if (started) {
 				request();
 				callback(data);
