@@ -15,6 +15,8 @@ function CometQueue() {
 		poll.res.end(JSON.stringify({
 			messages: message_queue
 		}));
+		poll = undefined;
+		message_queue = [];
 	}
 	
 	self.send = function(data) {
@@ -26,6 +28,9 @@ function CometQueue() {
 	};
 	
 	self.add = function(res) {
+		// do nothing if there is already another poll running
+		// could be rewritten to allow to have more than one data
+		// listener per client
 		if (poll) {
 			return;
 		}
