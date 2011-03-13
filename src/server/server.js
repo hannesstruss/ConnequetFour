@@ -19,6 +19,7 @@ function Server() {
 		});
 		res.end(message);
 	}
+	self.fail = fail;
 	
 	self.add_middleware = function(middleware) {
 		middlewares.push(middleware);

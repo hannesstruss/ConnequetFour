@@ -2,10 +2,45 @@
 	
 (function($) {
 	
+	function AjaxConnector(session_id, base_url) {
+		var
+			self = this;
+		
+		function get_query_string(param_map) {
+			var result = [];
+			
+			for (var key in param_map) {
+				result.push(key + "=" + param_map[key]);
+			}
+			
+			return result.join("&");
+		}
+		
+		function augment_params(params) {
+			params = params || {};
+			params.session_id = session_id;
+			return params;
+		}
+		
+		function build_url(procedure, params) {
+			return base_url + "/" + procedure + "?" + get_query_string(augment_params(params)); 
+		}
+		
+		self.get = function(procedure, callback, params) {
+			return $.get(build_url(procedure, params), callback);
+		};
+		
+		self.post = function(procedure, callback, params) {
+			return $.post(build_url(procedure, params), callback);
+		};
+		
+		console.log("Connector Created: " + session_id);
+	}
+	
 	/**
 	 * Periodically call an Ajax-URL. Call a callback when a result is returned.
 	 */
-	function CometListener(url) {
+	function CometListener(ajax) {
 		var 
 			self = this,
 			callback,
@@ -16,7 +51,7 @@
 		
 		function request() {
 			if (!killed) {
-				xhr = $.get(url, on_result);
+				xhr = ajax.get("poll", on_result);
 			}
 		}
 		
@@ -53,7 +88,7 @@
 	/**
 	 * Connects to the backend
 	 */
-	function Connector(session_id, backend_url, event_dispatcher, num_rows, num_cols) {
+	function Connector(ajax, event_dispatcher, num_rows, num_cols) {
 		var 
 			self = this,
 			STATES = { 
@@ -64,7 +99,7 @@
 			cell_data = [[]];
 		
 		self.insert_disc = function(colnum) {
-			$.post(backend_url + "insert_disc?col=" + colnum);
+			ajax.post("insert_disc", function() {}, {col: colnum});
 		};
 		
 		self.get_move_nr = function() {
@@ -148,5 +183,6 @@
 	ConnectFour.Connector = Connector;
 	ConnectFour.CometListener = CometListener;
 	ConnectFour.GameManager = GameManager;
+	ConnectFour.AjaxConnector = AjaxConnector;
 	
 })(jQuery);

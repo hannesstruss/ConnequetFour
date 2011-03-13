@@ -5,8 +5,15 @@
 	var 
 		connector_factory = {
 			get_connector: function(session_id, num_rows, num_cols) {
-				return new ConnectFour.Connector(session_id, "/cfour_be/", 
-					new ConnectFour.CometListener("/cfour_be/poll"), num_rows, num_cols);
+				var 
+					ajax_connector = new ConnectFour.AjaxConnector(session_id, "/cfour_be"),
+				
+					comet_listener = new ConnectFour.CometListener(ajax_connector),
+				
+					connector = new ConnectFour.Connector(ajax_connector, 
+						comet_listener, num_rows, num_cols);
+				
+				return connector;
 			}
 		},
 		

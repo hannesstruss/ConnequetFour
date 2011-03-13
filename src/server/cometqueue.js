@@ -19,7 +19,6 @@ function CometQueue() {
 	};
 	
 	self.add = function(session_id, res) {
-		console.log("Q add " + session_id);
 		var timeout = setTimeout(function() {
 			res.writeHead(200, {
 				'Content-type': "application/json"

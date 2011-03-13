@@ -33,19 +33,23 @@ var sys = require('sys'),
 	
 	server.post("/insert_disc", function(req, res) {
 		var col = parseInt(req.queryparams.col, 10);
+		console.log("Insert disc: " + col);
 		if (!isNaN(col)) {
 			model.insert_disc(col);
 			server.ok(res);
 			res.end();
-			comet_queue.send("0", JSON.stringify({
+			comet_queue.send(req.client.session_id, JSON.stringify({
 				op: "game_update",
 				cell_data: model.get_cell_data(),
 				is_reds_turn: model.is_reds_turn()
 			}));
+		} else {
+			server.fail(res, 400, "Bad/missing parameter col");
 		}
 	});
 	
 	server.get("/poll", function(req, res) {
+		console.log("Poll: " + req.client);
 		comet_queue.add(req.client.session_id, res);
 	});
 	

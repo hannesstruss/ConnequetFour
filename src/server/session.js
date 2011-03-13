@@ -19,9 +19,15 @@ function Client() {
 	function init() {
 		// TODO: inject session ID
 		session_id = generate_session_id();
+		
+		console.log("Create client: " + session_id);
 	}
 	
 	self.__defineGetter__("session_id", function() { return session_id; });
+	
+	self.toString = function() {
+		return '[Client session_id="' + session_id + '"]';
+	};
 	
 	init();
 }
@@ -32,7 +38,7 @@ function SessionManager() {
 		clients = {};
 		
 	self.register_client = function register_client(client) {
-		clients[client.session_id] = clients;
+		clients[client.session_id] = client;
 	};
 	
 	self.get_client = function(session_id) {
