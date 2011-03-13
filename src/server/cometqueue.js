@@ -1,4 +1,4 @@
-/*global exports: false */
+/*global exports: false, setTimeout: false, clearTimeout: false */
 
 function CometQueue() {
 	

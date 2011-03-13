@@ -1,3 +1,5 @@
+/*global exports: false */
+
 var 
 	http = require("http"),
 	sys = require("sys"),

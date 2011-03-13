@@ -1,3 +1,5 @@
+/*global exports: false */
+
 var ConnectFourModel = (function() {
 	var State = { 
 		UNSET: 0,

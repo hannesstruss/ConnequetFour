@@ -1,3 +1,5 @@
+/*global exports: false */
+
 (function() {
 	var
 		crypto = require("crypto");
