@@ -7,9 +7,9 @@ var
 
 function Server() {
 	var
-		_post_map,
-		_get_map,
-		_server;
+		post_map = {},
+		get_map = {},
+		server;
 		
 	function fail_404(res) {
 		res.writeHead(404, {
@@ -22,8 +22,8 @@ function Server() {
 		var parsed = url.parse(req.url, true);
 		switch (req.method.toLowerCase()) {
 			case "post":
-				if (_post_map[parsed.pathname]) {
-					_post_map[parsed.pathname](req, res);
+				if (post_map[parsed.pathname]) {
+					post_map[parsed.pathname](req, res);
 				} else {
 					fail_404(res);
 				}
@@ -31,8 +31,8 @@ function Server() {
 				
 			case "get":
 			case "head":
-				if (_get_map[parsed.pathname]) {
-					_get_map[parsed.pathname](req, res);
+				if (get_map[parsed.pathname]) {
+					get_map[parsed.pathname](req, res);
 				} else {
 					fail_404(res);
 				}
@@ -44,7 +44,7 @@ function Server() {
 	}
 	
 	this.listen = function listen(port, host) {
-		_server.listen(port, host);
+		server.listen(port, host);
 		sys.puts("Server at http://" + (host || "127.0.0.1") + ":" + port.toString() + "/");
 	};
 	
@@ -55,18 +55,15 @@ function Server() {
 	};
 	
 	this.post = function post(path, handler) {
-		_post_map[path] = handler;
+		post_map[path] = handler;
 	};
 	
 	this.get = function get(path, handler) {
-		_get_map[path] = handler;
+		get_map[path] = handler;
 	};
 	
 	function init() {
-		_post_map = {};
-		_get_map = {};
-		
-		_server = http.createServer(handle_request);
+		server = http.createServer(handle_request);
 	}
 	init();
 }
