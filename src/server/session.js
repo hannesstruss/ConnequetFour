@@ -1,7 +1,8 @@
 /*global exports: false */
 
 var
-	crypto = require("crypto");
+	crypto = require("crypto"),
+	url = require("url");
 
 function Client() {
 	var

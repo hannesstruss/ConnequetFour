@@ -29,9 +29,7 @@ var sys = require('sys'),
 		res.end(JSON.stringify(result));
 	});
 	
-	server.post("/insert_disc", function(req, res) {
-		var qp = url.parse(req.url, true).query;
-		
+	server.post("/insert_disc", cfserver.get_param_wrapper(function(req, res, qp) {
 		var col = parseInt(qp.col, 10);
 		if (!isNaN(col)) {
 			model.insert_disc(col);
@@ -44,7 +42,7 @@ var sys = require('sys'),
 			}));
 		}
 		
-	});
+	}));
 	
 	server.get("/poll", function(req, res) {
 		var qp = url.parse(req.url, true).query;
