@@ -16,8 +16,8 @@ var sys = require('sys'),
 		model = new cfmodel.Game(6, 7),
 		comet_queue = new CometQueue();
 		
-	server.add_middleware(new cfsession.SessionMiddleware(session_manager));
 	server.add_middleware(new helper.QueryParamMiddleware());
+	server.add_middleware(new cfsession.SessionMiddleware(session_manager));
 	
 	server.post("/init_game", function(req, res) {
 		var client = new cfsession.Client();
@@ -45,7 +45,6 @@ var sys = require('sys'),
 				is_reds_turn: model.is_reds_turn()
 			}));
 		}
-		
 	});
 	
 	server.get("/poll", function(req, res) {

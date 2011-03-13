@@ -11,6 +11,8 @@ function QueryParamMiddleware() {
 		req.queryparams = url.parse(req.url, true).query;
 		return true;
 	};
+	
+	self.name = self.constructor.name;
 }
 
 exports.QueryParamMiddleware = QueryParamMiddleware;

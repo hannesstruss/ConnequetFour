@@ -35,6 +35,10 @@ function SessionManager() {
 	};
 }
 
+/**
+ * Requires QueryParamMiddleware
+ * @param {Object} session_manager
+ */
 function SessionMiddleware(session_manager) {
 	var
 		self = this;
@@ -42,6 +46,8 @@ function SessionMiddleware(session_manager) {
 	self.apply = function(req, res) {
 		return true;
 	};
+	
+	self.name = self.constructor.name;
 }
 
 exports.SessionManager = SessionManager;
