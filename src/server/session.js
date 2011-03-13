@@ -26,17 +26,11 @@
 	// TODO: purge sessions after x inactive minutes
 	function SessionManager() {
 		var 
-			_clients;
-			
-		function init() {
 			_clients = {};
-		}
-		
+			
 		this.register_client = function register_client(client) {
 			_clients[client.get_session_id()] = client;
 		};
-		
-		init();
 	}
 
 	exports.SessionManager = SessionManager;
