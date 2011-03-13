@@ -76,11 +76,10 @@ function SessionMiddleware(session_manager, client_factory) {
 		}
 		
 		if (!client) {
-			return false;
+			throw new Error("Invalid session (expired?)"); // sessions can't expire yet...
 		}
 		
 		req.client = client;
-		return true;
 	};
 	
 	self.name = self.constructor.name;

@@ -34,8 +34,11 @@ function Server() {
 	function apply_middlewares(req, res) {
 		for (var n = 0; n < middlewares.length; n++) {
 			var middleware = middlewares[n];
-			if (!middleware.apply(req, res)) {
-				throw new Error("Failure in middleware " + middleware.name);
+			
+			try {
+				middleware.apply(req, res);
+			} catch (e) {
+				throw new Error("Failure in middleware " + middleware.name + "\nMessage: " + e.message);
 			}
 		}
 	}

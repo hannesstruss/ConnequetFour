@@ -9,7 +9,6 @@ function QueryParamMiddleware() {
 		
 	self.apply = function(req, res) {
 		req.queryparams = url.parse(req.url, true).query;
-		return true;
 	};
 	
 	self.name = self.constructor.name;
