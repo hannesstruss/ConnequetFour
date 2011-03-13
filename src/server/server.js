@@ -7,39 +7,70 @@ var
 
 function Server() {
 	var
+		self = this,
 		post_map = {},
 		get_map = {},
+		middlewares = [],
 		server;
 		
-	function fail_404(res) {
-		res.writeHead(404, {
+	function fail(res, code, message) {
+		res.writeHead(code, {
 			'Content-type': 'text/plain'
 		});
-		res.end("Not found");
+		res.end(message);
+	}
+	
+	self.add_middleware = function(middleware) {
+		middlewares.push(middleware);
+	};
+	
+	/**
+	 * Apply the registered middlewares to the request/response objects
+	 * Throws an error if a middleware cannot be applied
+	 * @param {Object} req The request object
+	 * @param {Object} res The response object
+	 */
+	function apply_middlewares(req, res) {
+		for (var n = 0; n < middlewares.length; n++) {
+			var middleware = middleware[n];
+			if (!middleware.apply(req, res)) {
+				throw new Error("Failure in middleware " + middleware.name);
+			}
+		}
 	}
 
 	function handle_request(req, res) {
-		var parsed = url.parse(req.url, true);
+		var 
+			parsed_url = url.parse(req.url, true),
+			handler;
+			
 		switch (req.method.toLowerCase()) {
 			case "post":
-				if (post_map[parsed.pathname]) {
-					post_map[parsed.pathname](req, res);
-				} else {
-					fail_404(res);
-				}
+				handler = post_map[parsed_url.pathname];
 				break;
 				
 			case "get":
 			case "head":
-				if (get_map[parsed.pathname]) {
-					get_map[parsed.pathname](req, res);
-				} else {
-					fail_404(res);
-				}
+				handler = get_map[parsed_url.pathname];
 				break;
 				
 			default:
-				fail_404(res);
+				fail(res, 405, "Method not allowed");
+		}
+		
+		if (handler) {
+			var success = true;
+			try {
+				apply_middlewares(req, res);
+			} catch (e) {
+				success = false;
+				fail(res, 500, e.message);
+			}
+			if (success) {
+				handler(req, res);
+			}
+		} else {
+			fail(res, 404, "Not found");
 		}
 	}
 	
