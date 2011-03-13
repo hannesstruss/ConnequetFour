@@ -1,37 +1,52 @@
 /*global exports: false, setTimeout: false, clearTimeout: false */
 
 function CometQueue() {
-	
 	var
 		self = this,
 		DEFAULT_TIMEOUT = 5000,
-		queue = {};
+		message_queue = [],
+		poll;
 	
-	// TODO: send a list of messages instead of only one per request
-	self.send = function(session_id, data) {
-		var queued = queue[session_id];
-		clearTimeout(queued.timeout);
-		queued.res.writeHead(200, {
+	function flush() {
+		clearTimeout(poll.timeout);
+		poll.res.writeHead(200, {
 			"Content-type": "application/json"
 		});
-		queued.res.end(data);
-		delete queued[session_id];
+		poll.res.end(JSON.stringify({
+			messages: message_queue
+		}));
+	}
+	
+	self.send = function(data) {
+		message_queue.push(data);
+		
+		if (poll) {
+			flush();
+		}
 	};
 	
-	self.add = function(session_id, res) {
-		var timeout = setTimeout(function() {
-			res.writeHead(200, {
-				'Content-type': "application/json"
-			});
-			res.end(JSON.stringify({
-				op: "nop"
-			}));
-			delete queue[session_id];
-		}, DEFAULT_TIMEOUT);
-		queue[session_id] = {
-			res: res,
-			timeout: timeout
-		};
+	self.add = function(res) {
+		if (poll) {
+			return;
+		}
+		
+		poll = {res: res};
+		
+		if (message_queue.length) {
+			flush();
+		} else {
+			poll.timeout = setTimeout(function() {
+				res.writeHead(200, {
+					'Content-type': "application/json"
+				});
+				res.end(JSON.stringify({
+					messages: [{
+						op: "nop"
+					}]
+				}));
+				poll = undefined;
+			}, DEFAULT_TIMEOUT);
+		}
 	};
 }
 

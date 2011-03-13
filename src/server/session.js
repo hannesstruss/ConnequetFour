@@ -4,7 +4,7 @@ var
 	crypto = require("crypto"),
 	url = require("url");
 
-function Client() {
+function Client(data_sink) {
 	var
 		self = this,
 		session_id;
@@ -16,19 +16,26 @@ function Client() {
 		return hash.digest("hex");
 	}
 	
-	function init() {
-		// TODO: inject session ID
-		session_id = generate_session_id();
-		
-		console.log("Create client: " + session_id);
-	}
-	
 	self.__defineGetter__("session_id", function() { return session_id; });
 	
 	self.toString = function() {
 		return '[Client session_id="' + session_id + '"]';
 	};
 	
+	self.send = function(data) {
+		data_sink.send(data);
+	};
+	
+	self.set_comet_response = function(res) {
+		data_sink.add(res);
+	};
+	
+	function init() {
+		// TODO: inject session ID
+		session_id = generate_session_id();
+		
+		console.log("Create client: " + session_id);
+	}
 	init();
 }
 // TODO: purge sessions after x inactive minutes
@@ -47,13 +54,6 @@ function SessionManager() {
 	
 	self.is_client_valid = function(client) {
 		return client && client.session_id && !!clients[client.session_id];
-	};
-}
-
-function ClientFactory() {
-	var self = this;
-	self.get_client = function() {
-		return new Client();
 	};
 }
 
@@ -88,4 +88,3 @@ function SessionMiddleware(session_manager, client_factory) {
 exports.SessionManager = SessionManager;
 exports.Client = Client;
 exports.SessionMiddleware = SessionMiddleware;
-exports.ClientFactory = ClientFactory;

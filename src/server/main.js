@@ -11,11 +11,15 @@ var sys = require('sys'),
 	session_manager = new cfsession.SessionManager(),
 	server = new cfserver.Server(),
 	model = new cfmodel.Game(6, 7),
-	comet_queue = new CometQueue();
-	
+
+	client_factory = {
+		get_client: function() {
+			return new cfsession.Client(new CometQueue());
+		}
+	};
+
 server.add_middleware(new helper.QueryParamMiddleware());
-server.add_middleware(new cfsession.SessionMiddleware(session_manager,
-	new cfsession.ClientFactory()));
+server.add_middleware(new cfsession.SessionMiddleware(session_manager, client_factory));
 
 server.post("/init_game", function(req, res) {
 	var result = {
@@ -35,11 +39,11 @@ server.post("/insert_disc", function(req, res) {
 		model.insert_disc(col);
 		server.ok(res);
 		res.end();
-		comet_queue.send(req.client.session_id, JSON.stringify({
+		req.client.send({
 			op: "game_update",
 			cell_data: model.get_cell_data(),
 			is_reds_turn: model.is_reds_turn()
-		}));
+		});
 	} else {
 		server.fail(res, 400, "Bad/missing parameter col");
 	}
@@ -47,7 +51,7 @@ server.post("/insert_disc", function(req, res) {
 
 server.get("/poll", function(req, res) {
 	console.log("Poll: " + req.client);
-	comet_queue.add(req.client.session_id, res);
+	req.client.set_comet_response(res);
 });
 
 server.listen(8124);

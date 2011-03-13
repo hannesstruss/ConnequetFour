@@ -74,7 +74,9 @@
 			console.log(comet_data);
 			if (started) {
 				request();
-				callback(comet_data);
+				for (var n = 0; n < comet_data.messages.length; n++) {
+					callback(comet_data.messages[n]);
+				}
 			}
 		};
 		
