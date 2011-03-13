@@ -38,6 +38,12 @@
 	}
 	
 	/**
+	 * sole purpose of this class is to display a nice name in the debugger console
+	 * @param {Object} data
+	 */	
+	function CometData() {}
+	
+	/**
 	 * Periodically call an Ajax-URL. Call a callback when a result is returned.
 	 */
 	function CometListener(ajax) {
@@ -49,6 +55,14 @@
 			killed = false,
 			xhr;
 		
+		function get_comet_data(data) {
+			var comet_data = new CometData();
+			for (var key in data) {
+				comet_data[key] = data[key];
+			}
+			return comet_data;
+		}
+		
 		function request() {
 			if (!killed) {
 				xhr = ajax.get("poll", on_result);
@@ -56,10 +70,11 @@
 		}
 		
 		on_result = function(data) {
-			console.log(data);
+			var comet_data = get_comet_data(data);
+			console.log(comet_data);
 			if (started) {
 				request();
-				callback(data);
+				callback(comet_data);
 			}
 		};
 		
