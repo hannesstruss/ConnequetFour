@@ -32,7 +32,7 @@ function Server() {
 	 */
 	function apply_middlewares(req, res) {
 		for (var n = 0; n < middlewares.length; n++) {
-			var middleware = middleware[n];
+			var middleware = middlewares[n];
 			if (!middleware.apply(req, res)) {
 				throw new Error("Failure in middleware " + middleware.name);
 			}
@@ -65,6 +65,7 @@ function Server() {
 			} catch (e) {
 				success = false;
 				fail(res, 500, e.message);
+				throw e;
 			}
 			if (success) {
 				handler(req, res);

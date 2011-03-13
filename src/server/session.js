@@ -35,5 +35,15 @@ function SessionManager() {
 	};
 }
 
+function SessionMiddleware(session_manager) {
+	var
+		self = this;
+		
+	self.apply = function(req, res) {
+		return true;
+	}
+}
+
 exports.SessionManager = SessionManager;
 exports.Client = Client;
+exports.SessionMiddleware = SessionMiddleware;

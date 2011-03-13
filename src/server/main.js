@@ -13,7 +13,10 @@ var sys = require('sys'),
 		session_manager = new cfsession.SessionManager(),
 		server = new cfserver.Server(),
 		model = new cfmodel.Game(6, 7),
-		comet_queue = new CometQueue();
+		comet_queue = new CometQueue(),
+		session_middleware = new cfsession.SessionMiddleware(session_manager);
+		
+	server.add_middleware(session_middleware);
 	
 	server.post("/init_game", function(req, res) {
 		var client = new cfsession.Client();
