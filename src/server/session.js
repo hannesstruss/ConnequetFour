@@ -6,7 +6,8 @@ var
 
 function Client() {
 	var
-		_session_id;
+		self = this,
+		session_id;
 	
 	function generate_session_id() {
 		var hash = crypto.createHash("sha1");
@@ -15,23 +16,22 @@ function Client() {
 		return hash.digest("hex");
 	}
 	
-	this.get_session_id = function get_session_id() {
-		return _session_id;
-	};
-	
 	function init() {
-		_session_id = generate_session_id();
+		// TODO: inject session ID
+		session_id = generate_session_id();
 	}
+	
+	self.__defineGetter__("session_id", function() { return session_id; });
 	
 	init();
 }
 // TODO: purge sessions after x inactive minutes
 function SessionManager() {
 	var 
-		_clients = {};
+		clients = {};
 		
 	this.register_client = function register_client(client) {
-		_clients[client.get_session_id()] = client;
+		clients[client.session_id] = clients;
 	};
 }
 
@@ -44,6 +44,10 @@ function SessionMiddleware(session_manager) {
 		self = this;
 		
 	self.apply = function(req, res) {
+		if (!req.queryparams.session_id) {
+			console.log("no session id!");
+		}
+		
 		return true;
 	};
 	
