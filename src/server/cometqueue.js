@@ -7,6 +7,7 @@ function CometQueue() {
 		DEFAULT_TIMEOUT = 5000,
 		queue = [];
 	
+	// TODO: send a list of messages instead of only one per request
 	self.send = function(session_id, data) {
 		var queued = queue[session_id];
 		clearTimeout(queued.timeout);
