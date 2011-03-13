@@ -4,6 +4,7 @@ var sys = require('sys'),
 	cfmodel = require("./CFourModel"),
 	cfsession = require("./session"),
 	cfserver = require("./server"),
+	helper = require("./helper"),
 	constants = require("./constants").CONSTANTS,
 	CometQueue = require("./cometqueue").CometQueue;
 	
@@ -13,10 +14,10 @@ var sys = require('sys'),
 		session_manager = new cfsession.SessionManager(),
 		server = new cfserver.Server(),
 		model = new cfmodel.Game(6, 7),
-		comet_queue = new CometQueue(),
-		session_middleware = new cfsession.SessionMiddleware(session_manager);
+		comet_queue = new CometQueue();
 		
-	server.add_middleware(session_middleware);
+	server.add_middleware(new cfsession.SessionMiddleware(session_manager));
+	server.add_middleware(new helper.QueryParamMiddleware());
 	
 	server.post("/init_game", function(req, res) {
 		var client = new cfsession.Client();
@@ -32,8 +33,8 @@ var sys = require('sys'),
 		res.end(JSON.stringify(result));
 	});
 	
-	server.post("/insert_disc", cfserver.get_param_wrapper(function(req, res, qp) {
-		var col = parseInt(qp.col, 10);
+	server.post("/insert_disc", function(req, res) {
+		var col = parseInt(req.queryparams.col, 10);
 		if (!isNaN(col)) {
 			model.insert_disc(col);
 			server.ok(res);
@@ -45,7 +46,7 @@ var sys = require('sys'),
 			}));
 		}
 		
-	}));
+	});
 	
 	server.get("/poll", function(req, res) {
 		var qp = url.parse(req.url, true).query;

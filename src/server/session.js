@@ -41,7 +41,7 @@ function SessionMiddleware(session_manager) {
 		
 	self.apply = function(req, res) {
 		return true;
-	}
+	};
 }
 
 exports.SessionManager = SessionManager;

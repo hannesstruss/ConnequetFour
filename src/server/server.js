@@ -101,13 +101,4 @@ function Server() {
 	init();
 }
 
-function get_param_wrapper(func) {
-	function wrapper(req, res) {
-		var qp = url.parse(req.url, true).query;
-		return func(req, res, qp);
-	}
-	return wrapper;
-}
-
 exports.Server = Server;
-exports.get_param_wrapper = get_param_wrapper;
