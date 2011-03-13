@@ -75,8 +75,11 @@ function SessionMiddleware(session_manager, client_factory) {
 			client = session_manager.get_client(req.queryparams.session_id);
 		}
 		
-		req.client = client;
+		if (!client) {
+			return false;
+		}
 		
+		req.client = client;
 		return true;
 	};
 	
