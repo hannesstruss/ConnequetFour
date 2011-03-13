@@ -63,6 +63,7 @@ function Server() {
 	};
 	
 	function init() {
+		// TODO: inject http server in constructor
 		server = http.createServer(handle_request);
 	}
 	init();
